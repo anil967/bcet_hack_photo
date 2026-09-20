@@ -83,24 +83,36 @@ export default function Home() {
     setStage("camera");
   };
 
+  const isCaptureStage = stage === "camera" || stage === "preview" || stage === "searching";
+
   return (
-    <div className="flex flex-col min-h-[100dvh] justify-between bg-[#0a0705] text-[#e0d5c1] px-3 py-3 sm:px-6 sm:py-6 select-none overflow-x-hidden">
+    <div
+      className={`flex flex-col ${
+        isCaptureStage
+          ? "h-[100dvh] max-h-[100dvh] overflow-hidden justify-between py-2 sm:py-4 px-3 sm:px-6"
+          : "min-h-[100dvh] overflow-y-auto justify-start py-4 sm:py-6 px-3 sm:px-6"
+      } bg-[#0a0705] text-[#e0d5c1] select-none`}
+    >
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-4xl mx-auto flex flex-col items-center justify-center">
+      <main
+        className={`w-full max-w-4xl mx-auto flex flex-col items-center ${
+          isCaptureStage ? "flex-1 min-h-0 justify-between" : "flex-1 justify-center"
+        }`}
+      >
         {/* Compact Hero Header (No top bar) */}
         {(stage === "camera" || stage === "preview") && (
-          <div className="text-center w-full max-w-md mx-auto mb-3 sm:mb-5 animate-fadeIn">
+          <div className="text-center w-full max-w-md mx-auto animate-fadeIn flex-shrink-0 pt-0.5 pb-1 sm:pb-2">
             {/* Medallion + Eyebrow */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#140c06] border border-[#f39c12]/35 text-[#ffd700] text-[10px] sm:text-xs font-heading uppercase tracking-[0.18em] mb-2 shadow-[0_0_15px_rgba(243,156,18,0.2)]">
-              <Compass className="w-3.5 h-3.5 text-[#ffd700] animate-pulse-slow" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#140c06] border border-[#f39c12]/35 text-[#ffd700] text-[9px] sm:text-xs font-heading uppercase tracking-[0.16em] mb-1 shadow-[0_0_12px_rgba(243,156,18,0.2)] rounded-full">
+              <Compass className="w-3 h-3 text-[#ffd700] animate-pulse-slow" />
               <span>The Odyssey Hackathon 2K26</span>
             </div>
 
             {/* Display Title */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
               Find Your Odyssey Moments
             </h1>
-            <p className="text-xs sm:text-sm text-[#a89680] font-body mt-1 sm:mt-1.5 leading-snug max-w-xs sm:max-w-sm mx-auto">
+            <p className="text-[11px] sm:text-xs text-[#a89680] font-body mt-0.5 leading-tight max-w-xs mx-auto">
               Take a selfie to discover your event photographs instantly.
             </p>
           </div>
@@ -152,9 +164,9 @@ export default function Home() {
 
       {/* Minimal Odyssey Footer */}
       {(stage === "camera" || stage === "preview") && (
-        <footer className="w-full text-center py-2 text-[11px] text-[#705e4c] font-heading tracking-wider">
-          <div className="flex items-center justify-center gap-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#f39c12]" />
+        <footer className="w-full text-center py-1 text-[10px] sm:text-[11px] text-[#705e4c] font-heading tracking-wider flex-shrink-0">
+          <div className="flex items-center justify-center gap-1.5">
+            <ShieldCheck className="w-3 h-3 text-[#f39c12]" />
             <span>Biometric data processed in memory only · Selfies never stored</span>
           </div>
         </footer>
