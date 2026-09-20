@@ -22,7 +22,8 @@ export interface SearchErrorResponse {
 
 export type SearchResponse = SearchSuccessResponse | SearchErrorResponse;
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const rawUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = rawUrl.replace(/\/+$/, "");
 
 export async function searchPhotosWithSelfie(base64Image: string): Promise<SearchResponse> {
   try {
