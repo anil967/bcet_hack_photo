@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { Camera, RefreshCw, Upload, AlertCircle, Sparkles } from "lucide-react";
+import { RefreshCw, Upload, AlertCircle, Sparkles } from "lucide-react";
 
 interface CameraCaptureProps {
   onCapture: (base64Image: string) => void;
@@ -225,18 +225,21 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
           <Upload className="w-5 h-5" />
         </button>
 
-        {/* Primary Shutter Button */}
+        {/* Primary Shutter Button with HackOdyssey Spartan Medallion */}
         <button
           type="button"
           onClick={handleCapture}
           disabled={!isReady}
           aria-label="Take Selfie"
-          className="relative group p-1.5 rounded-full bg-[#f39c12]/20 hover:bg-[#f39c12]/40 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_25px_rgba(243,156,18,0.45)] active:scale-95"
+          title="Take Selfie"
+          className="relative group p-1 rounded-full bg-gradient-to-tr from-[#b78103]/50 via-[#ffd700]/70 to-[#f39c12]/50 hover:from-[#ffd700] hover:to-[#ffd700] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_25px_rgba(243,156,18,0.5),0_6px_20px_rgba(0,0,0,0.8)] active:scale-90 hover:scale-105"
         >
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#ffd700] via-[#f39c12] to-[#b78103] flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-            <div className="w-13 h-13 rounded-full border border-[#0a0705] bg-[#0a0705] flex items-center justify-center">
-              <Camera className="w-6 h-6 text-[#ffd700]" />
-            </div>
+          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full overflow-hidden flex items-center justify-center border-2 border-[#ffd700] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)] bg-[#140c06]">
+            <img
+              src="/odyssey_shutter.png"
+              alt="Capture Selfie"
+              className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-300 group-hover:scale-110 group-active:scale-95"
+            />
           </div>
         </button>
 
