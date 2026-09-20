@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
-import { Camera, ShieldCheck, Sparkles, Image as ImageIcon } from "lucide-react";
+import { ShieldCheck, Compass, Sparkles } from "lucide-react";
 
 import { CameraCapture } from "../components/CameraCapture";
 import { SelfiePreview } from "../components/SelfiePreview";
@@ -23,22 +23,18 @@ export default function Home() {
   const [errorCode, setErrorCode] = useState<string>("UNKNOWN");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // Handle capture from camera or file
   const handleCapture = (base64Image: string) => {
     setCapturedImage(base64Image);
     setStage("preview");
   };
 
-  // Retake photo
   const handleRetake = () => {
     setCapturedImage(null);
     setStage("camera");
   };
 
-  // Submit selfie to backend API
   const handleSubmitSelfie = async () => {
     if (!capturedImage) return;
-
     setStage("searching");
 
     try {
@@ -48,16 +44,16 @@ export default function Home() {
         if (result.count > 0) {
           setPhotos(result.photos);
           setStage("results");
-          // Trigger celebratory confetti
+          // Golden Odyssey confetti
           try {
             confetti({
-              particleCount: 70,
-              spread: 60,
-              origin: { y: 0.7 },
-              colors: ["#6366f1", "#818cf8", "#a5b4fc", "#ffffff"],
+              particleCount: 80,
+              spread: 70,
+              origin: { y: 0.65 },
+              colors: ["#ffd700", "#f39c12", "#e5a93c", "#d4af37", "#ffffff"],
             });
           } catch {
-            // Ignore if canvas-confetti is not available
+            // fallback
           }
         } else {
           setPhotos([]);
@@ -65,12 +61,12 @@ export default function Home() {
         }
       } else {
         setErrorCode(result.error || "SEARCH_FAILED");
-        setErrorMessage(result.message || "An error occurred while finding photos.");
+        setErrorMessage(result.message || "An error occurred while discovering photos.");
         setStage("error");
       }
     } catch {
       setErrorCode("NETWORK_ERROR");
-      setErrorMessage("Unable to connect to the server. Please try again.");
+      setErrorMessage("Unable to connect to PhotoFinder server. Please try again.");
       setStage("error");
     }
   };
@@ -89,44 +85,50 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="w-full border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
-              <Camera className="w-4 h-4" />
+    <div className="flex flex-col min-h-screen bg-[#0a0705]">
+      {/* Odyssey Header */}
+      <header className="w-full border-b border-[#f39c12]/30 bg-[#0e0905]/90 backdrop-blur-md sticky top-0 z-40 shadow-[0_4px_25px_rgba(0,0,0,0.8)]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* Golden Spartan / Voyage Medallion */}
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#f39c12]/30 to-[#0a0705] border border-[#ffd700]/60 flex items-center justify-center text-[#ffd700] shadow-[0_0_12px_rgba(243,156,18,0.35)]">
+              <Compass className="w-5 h-5 animate-pulse-slow text-[#ffd700]" />
             </div>
-            <span className="font-bold text-lg tracking-tight text-white">PhotoFinder</span>
+            <div className="flex flex-col">
+              <span className="font-heading font-bold text-lg tracking-[0.14em] uppercase bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
+                The Odyssey
+              </span>
+              <span className="font-heading text-[10px] tracking-[0.18em] text-[#f39c12] uppercase font-semibold">
+                PhotoFinder · Journey to Innovation
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs text-zinc-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#1c130b]/80 border border-[#f39c12]/40 text-xs font-heading tracking-wider text-[#ffd700]">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#ffd700]" />
             <span className="hidden sm:inline">Secure Biometric Match</span>
             <span className="sm:hidden">Secure</span>
           </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
+      {/* Main Stage */}
       <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
-        {/* Landing Hero (shown in camera or preview mode) */}
         {(stage === "camera" || stage === "preview") && (
           <div className="text-center max-w-xl mx-auto mb-8 animate-fadeIn">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Event Photo Recognition</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f39c12]/15 border border-[#f39c12]/30 text-[#ffd700] text-xs font-heading uppercase tracking-[0.18em] mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-[#ffd700]" />
+              <span>BCET ODYSSEY HACKATHON · TECH FOR BHARAT</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Find Your Event Photos
+            <h1 className="text-3xl sm:text-5xl font-heading font-extrabold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              Find Your Odyssey Moments
             </h1>
-            <p className="text-sm sm:text-base text-zinc-400 mt-2.5 max-w-md mx-auto leading-relaxed">
-              Take a quick selfie and instantly discover all the event moments you appear in.
+            <p className="text-sm sm:text-base text-[#c9bba8] font-body mt-3 max-w-md mx-auto leading-relaxed">
+              Capture a quick selfie to discover every moment you appear in across the hackathon voyage.
             </p>
           </div>
         )}
 
-        {/* Dynamic Stages */}
         {stage === "camera" && (
           <CameraCapture onCapture={handleCapture} onError={handleCameraError} />
         )}
@@ -160,7 +162,7 @@ export default function Home() {
         )}
       </main>
 
-      {/* Fullscreen Photo Lightbox Modal */}
+      {/* Lightbox Modal */}
       {stage === "results" && activePhotoIndex !== null && (
         <PhotoViewer
           photos={photos}
@@ -170,14 +172,14 @@ export default function Home() {
         />
       )}
 
-      {/* Footer */}
-      <footer className="w-full border-t border-zinc-900 bg-zinc-950/60 py-6 text-center text-xs text-zinc-600">
+      {/* Odyssey Footer */}
+      <footer className="w-full border-t border-[#f39c12]/20 bg-[#070503]/80 py-6 text-center text-xs text-[#8f7c66] font-heading">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>PhotoFinder &copy; 2026. All photographs encrypted and served on-demand.</span>
-          <div className="flex items-center gap-4 text-zinc-500">
-            <span>No registration required</span>
-            <span>•</span>
-            <span>Selfies never stored</span>
+          <span className="tracking-wider">THE ODYSSEY HACKATHON 2K26 · BCET</span>
+          <div className="flex items-center gap-4 text-[#a89680] tracking-wider">
+            <span>NO REGISTRATION REQUIRED</span>
+            <span>·</span>
+            <span>SELFIES NEVER STORED</span>
           </div>
         </div>
       </footer>

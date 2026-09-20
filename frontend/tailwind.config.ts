@@ -9,26 +9,39 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        odyssey: {
+          bg: "#0a0705",
+          card: "rgba(28, 19, 11, 0.88)",
+          parchment: "rgba(22, 15, 9, 0.92)",
+          gold: "#f39c12",
+          "gold-bright": "#ffd700",
+          "gold-dark": "#b78103",
+          bronze: "#8e5a2b",
+          "bronze-dark": "#2a1a0f",
+          border: "rgba(243, 156, 18, 0.4)",
+          text: "#e0d5c1",
+          muted: "#a89680",
+        },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-cinzel)", "Cinzel", "serif"],
+        heading: ["var(--font-cinzel)", "Cinzel", "serif"],
+        body: ["var(--font-marcellus)", "Marcellus", "serif"],
+        serif: ["var(--font-serif)", "Cormorant Garamond", "serif"],
       },
       keyframes: {
-        pulseSlow: {
-          "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.85", transform: "scale(1.02)" },
+        shimmer: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
         },
-        scan: {
-          "0%": { top: "5%" },
-          "50%": { top: "85%" },
-          "100%": { top: "5%" },
+        goldPulse: {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.75", transform: "scale(1.03)" },
         },
       },
       animation: {
-        "pulse-slow": "pulseSlow 3s ease-in-out infinite",
-        scan: "scan 2.5s ease-in-out infinite",
+        shimmer: "shimmer 8s linear infinite",
+        "gold-pulse": "goldPulse 3s ease-in-out infinite",
       },
     },
   },

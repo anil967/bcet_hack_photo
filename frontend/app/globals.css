@@ -3,8 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --background: 230 20% 5%;
-  --foreground: 220 20% 98%;
+  --color-gold-bright: #ffd700;
+  --color-gold-primary: #f39c12;
+  --color-gold-dark: #b78103;
+  --color-bronze: #8e5a2b;
+  --color-bronze-dark: #2a1a0f;
+  --bg-dark: #0a0705;
+  --bg-card: rgba(28, 19, 11, 0.88);
+  --border-gold: rgba(243, 156, 18, 0.4);
+  --border-gold-solid: #d4ac0d;
 }
 
 * {
@@ -12,12 +19,12 @@
 }
 
 body {
-  color: #f1f5f9;
-  background-color: #090a0f;
+  color: #e0d5c1;
+  background-color: #0a0705;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(243, 156, 18, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 20% 40%, rgba(183, 129, 3, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(142, 90, 43, 0.07) 0%, transparent 50%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
@@ -25,28 +32,62 @@ body {
   padding: 0;
 }
 
-/* Custom subtle scrollbar */
+/* HackOdyssey Gold Action Button */
+.gold-action-btn {
+  background: linear-gradient(135deg, #b78103 0%, #f39c12 100%);
+  border: 1px solid #ffd700;
+  color: #0a0705;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 15px rgba(243, 156, 18, 0.25);
+}
+
+.gold-action-btn:hover {
+  background: linear-gradient(135deg, #f39c12 0%, #ffd700 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.45);
+  transform: translateY(-2px);
+  color: #000;
+}
+
+/* Secondary Odyssey Button */
+.odyssey-secondary-btn {
+  background: #1c130bcc;
+  border: 1px solid rgba(243, 156, 18, 0.4);
+  color: #d1c4b0;
+  transition: all 0.25s ease;
+}
+
+.odyssey-secondary-btn:hover {
+  border-color: #ffd700;
+  color: #fff;
+  background: #2a1b0fee;
+  box-shadow: 0 0 12px rgba(243, 156, 18, 0.25);
+}
+
+/* Custom gold scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090a0f;
+  background: #0a0705;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 4px;
+  background: #3d2508;
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #8e5a2b;
 }
 
-/* Accessible focus outline */
+/* Accessible gold focus outline */
 button:focus-visible, a:focus-visible, input:focus-visible {
-  outline: 2px solid #818cf8;
+  outline: 2px solid #ffd700;
   outline-offset: 2px;
 }
 

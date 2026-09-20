@@ -36,11 +36,10 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
         }
       }}
       aria-label={`View photo ${photo.fileName}`}
-      className="group relative aspect-square rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800/80 hover:border-indigo-500/50 transition-all duration-300 shadow-md hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+      className="group relative aspect-square rounded-none overflow-hidden bg-[#0c0805] border border-[#f39c12]/30 hover:border-[#ffd700] transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(243,156,18,0.35)] focus:outline-none focus:ring-2 focus:ring-[#ffd700] cursor-pointer"
     >
-      {/* Skeleton loading shimmer */}
       {!isLoaded && (
-        <div className="absolute inset-0 bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 animate-pulse" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#140c06] via-[#24150b] to-[#140c06] animate-pulse" />
       )}
 
       <img
@@ -53,16 +52,16 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
         }`}
       />
 
-      {/* Subtle match badge */}
+      {/* Gold Match badge */}
       {photo.matchScore && (
-        <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-zinc-950/75 backdrop-blur-md border border-white/10 text-[10px] font-medium text-indigo-300 opacity-90 group-hover:opacity-100 transition">
-          Match
+        <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 bg-[#0a0705]/85 backdrop-blur-md border border-[#ffd700]/50 text-[10px] font-heading tracking-wider font-semibold text-[#ffd700]">
+          ODYSSEY MATCH
         </div>
       )}
 
-      {/* Hover overlay with action buttons */}
-      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-3">
-        <div className="text-xs font-medium text-zinc-200 truncate max-w-[65%]">
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0705]/95 via-[#0a0705]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-3">
+        <div className="text-xs font-heading font-medium text-[#e0d5c1] truncate max-w-[65%]">
           {photo.fileName}
         </div>
 
@@ -72,7 +71,7 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
             onClick={handleDownloadClick}
             title="Download photograph"
             aria-label={`Download ${photo.fileName}`}
-            className="p-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-white/10 backdrop-blur-md transition shadow"
+            className="p-2 bg-[#1c130b] hover:bg-[#2e1d0f] text-[#ffd700] border border-[#f39c12]/40 transition shadow"
           >
             {downloaded ? (
               <Check className="w-4 h-4 text-emerald-400" />
@@ -83,9 +82,9 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
 
           <div
             title="View Fullscreen"
-            className="p-2 rounded-lg bg-indigo-600/90 hover:bg-indigo-600 text-white backdrop-blur-md transition shadow"
+            className="p-2 gold-action-btn transition shadow"
           >
-            <Maximize2 className="w-4 h-4" />
+            <Maximize2 className="w-4 h-4 text-[#0a0705]" />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Download, Camera, Check, Sparkles, Loader2 } from "lucide-react";
+import { Download, Camera, Check, Loader2 } from "lucide-react";
 import { PhotoItem, getFullPhotoUrl } from "../lib/api";
 import { PhotoCard } from "./PhotoCard";
 
@@ -25,7 +25,6 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
     document.body.removeChild(link);
   };
 
-  // Safe batch download: downloads sequentially with short delay
   const handleDownloadAll = async () => {
     if (downloadingAll || photos.length === 0) return;
 
@@ -35,7 +34,6 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
     for (let i = 0; i < photos.length; i++) {
       downloadSinglePhoto(photos[i]);
       setDownloadedCount(i + 1);
-      // 300ms pause to avoid overwhelming browser download manager
       await new Promise((resolve) => setTimeout(resolve, 350));
     }
 
@@ -44,17 +42,19 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
-      {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-zinc-800">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[#f39c12]/30">
         <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold tracking-tight text-white">Your Event Photos</h2>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-              {photos.length} found
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
+              Your Odyssey Moments
+            </h2>
+            <span className="px-3 py-1 text-xs font-heading font-bold tracking-wider uppercase bg-[#f39c12]/15 text-[#ffd700] border border-[#f39c12]/40">
+              {photos.length} Found
             </span>
           </div>
-          <p className="text-sm text-zinc-400 mt-1">
-            Matching photographs from the event gallery.
+          <p className="text-xs sm:text-sm text-[#a89680] font-body mt-1">
+            Photographs captured across The Odyssey Hackathon 2K26.
           </p>
         </div>
 
@@ -63,9 +63,9 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
           <button
             type="button"
             onClick={onReset}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 text-xs font-medium transition"
+            className="flex items-center gap-2 px-4 py-2.5 odyssey-secondary-btn font-heading text-xs tracking-wider uppercase"
           >
-            <Camera className="w-4 h-4" />
+            <Camera className="w-4 h-4 text-[#ffd700]" />
             <span>Search Again</span>
           </button>
 
@@ -73,16 +73,16 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
             type="button"
             onClick={handleDownloadAll}
             disabled={downloadingAll}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-semibold shadow-lg shadow-indigo-600/20 transition disabled:opacity-60"
+            className="flex items-center gap-2 px-5 py-2.5 gold-action-btn font-heading text-xs tracking-wider uppercase disabled:opacity-60"
           >
             {downloadingAll ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin text-[#0a0705]" />
                 <span>Downloading ({downloadedCount}/{photos.length})...</span>
               </>
             ) : (
               <>
-                <Download className="w-4 h-4" />
+                <Download className="w-4 h-4 text-[#0a0705]" />
                 <span>Download All</span>
               </>
             )}
@@ -91,7 +91,7 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
       </div>
 
       {/* Responsive Gallery Grid: 4 cols desktop, 3 cols tablet, 2 cols mobile */}
-      <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
         {photos.map((photo, index) => (
           <PhotoCard
             key={photo.id}

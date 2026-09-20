@@ -19,7 +19,6 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
 
-  // Check device camera count
   useEffect(() => {
     if (navigator.mediaDevices?.enumerateDevices) {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
@@ -29,12 +28,10 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
     }
   }, []);
 
-  // Initialize or restart camera
   const startCamera = useCallback(async () => {
     setIsReady(false);
     setPermissionError(null);
 
-    // Stop existing stream if any
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
@@ -85,14 +82,12 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
   useEffect(() => {
     startCamera();
     return () => {
-      // Clean up stream on unmount
       if (stream) {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
   }, [facingMode]);
 
-  // Capture frame to canvas and export base64 JPEG
   const handleCapture = () => {
     if (!videoRef.current || !isReady) return;
 
@@ -108,18 +103,14 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // If facing user, mirror horizontally for natural selfie photo
     if (facingMode === "user") {
       ctx.translate(width, 0);
       ctx.scale(-1, 1);
     }
 
     ctx.drawImage(video, 0, 0, width, height);
-
-    // Export compressed JPEG under 1.5MB
     const dataUrl = canvas.toDataURL("image/jpeg", 0.88);
 
-    // Stop tracks after capture
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
@@ -127,12 +118,10 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
     onCapture(dataUrl);
   };
 
-  // Switch between front and back camera
   const toggleCamera = () => {
     setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
   };
 
-  // File fallback upload
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -161,27 +150,27 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      {/* Video Container */}
-      <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-zinc-950 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl flex items-center justify-center">
+      {/* Video Frame */}
+      <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-[#0c0805] rounded-none border-2 border-[#f39c12]/40 shadow-[0_12px_45px_rgba(0,0,0,0.95)] overflow-hidden flex items-center justify-center">
         {permissionError ? (
           <div className="p-6 text-center flex flex-col items-center justify-center space-y-4">
-            <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+            <div className="w-14 h-14 rounded-full bg-red-950/40 border border-red-500/30 flex items-center justify-center text-red-400">
               <AlertCircle className="w-7 h-7" />
             </div>
-            <h3 className="text-lg font-semibold text-zinc-100">Camera Access Required</h3>
-            <p className="text-sm text-zinc-400 leading-relaxed max-w-xs">{permissionError}</p>
+            <h3 className="text-lg font-heading font-semibold text-[#f8f5ee]">Camera Access Required</h3>
+            <p className="text-sm text-[#c9bba8] leading-relaxed max-w-xs">{permissionError}</p>
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 type="button"
                 onClick={startCamera}
-                className="px-4 py-2 text-sm font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-lg transition"
+                className="px-4 py-2 text-xs font-heading tracking-wider odyssey-secondary-btn rounded-none"
               >
                 Try Camera Again
               </button>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="px-4 py-2 text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition flex items-center justify-center gap-2"
+                className="px-4 py-2 text-xs font-heading tracking-wider gold-action-btn rounded-none flex items-center justify-center gap-2"
               >
                 <Upload className="w-4 h-4" />
                 Upload Selfie
@@ -200,19 +189,19 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
               } ${isReady ? "opacity-100" : "opacity-0"}`}
             />
 
-            {/* Face Guide Oval */}
+            {/* Golden Face Guide Oval */}
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="w-56 h-72 sm:w-64 sm:h-80 rounded-[50%] border-2 border-dashed border-indigo-400/60 shadow-[0_0_20px_rgba(99,102,241,0.25)] flex flex-col items-center justify-between py-6">
-                <span className="text-[11px] font-medium uppercase tracking-wider text-indigo-300 bg-zinc-950/80 px-3 py-1 rounded-full border border-indigo-500/30 backdrop-blur-sm">
+              <div className="w-56 h-72 sm:w-64 sm:h-80 rounded-[50%] border-2 border-dashed border-[#ffd700]/70 shadow-[0_0_30px_rgba(243,156,18,0.35)] flex flex-col items-center justify-between py-6">
+                <span className="text-[11px] font-heading font-semibold uppercase tracking-[0.16em] text-[#ffd700] bg-[#0c0805]/90 px-3 py-1 border border-[#f39c12]/50 backdrop-blur-sm">
                   Position Face Here
                 </span>
-                <span className="text-[10px] text-zinc-400 bg-zinc-950/70 px-2.5 py-0.5 rounded-full">
+                <span className="text-[10px] font-heading tracking-wider text-[#d4b96a] bg-[#0c0805]/85 px-2.5 py-0.5 border border-[#f39c12]/30">
                   Single person only
                 </span>
               </div>
             </div>
 
-            {/* Top Toolbar overlay */}
+            {/* Camera Switch button */}
             <div className="absolute top-4 right-4 flex items-center gap-2">
               {hasMultipleCameras && (
                 <button
@@ -220,49 +209,46 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
                   onClick={toggleCamera}
                   title="Switch Camera"
                   aria-label="Switch Camera"
-                  className="p-2.5 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 backdrop-blur-md transition shadow-lg"
+                  className="p-2.5 bg-[#140d07]/80 hover:bg-[#23170d] text-[#ffd700] border border-[#f39c12]/40 backdrop-blur-md transition shadow-lg"
                 >
                   <RefreshCw className="w-4 h-4" />
                 </button>
               )}
             </div>
 
-            {/* Bottom Controls */}
+            {/* Bottom Shutter & Upload Controls */}
             <div className="absolute bottom-6 inset-x-0 flex items-center justify-center gap-6 px-6">
-              {/* File upload fallback button */}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 title="Upload from device"
                 aria-label="Upload photo from device"
-                className="p-3.5 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 backdrop-blur-md transition"
+                className="p-3.5 bg-[#140d07]/80 hover:bg-[#23170d] text-[#ffd700] border border-[#f39c12]/40 backdrop-blur-md transition hover:border-[#ffd700]"
               >
                 <Upload className="w-5 h-5" />
               </button>
 
-              {/* Shutter Button */}
+              {/* Shutter Button with Golden Beacon Ring */}
               <button
                 type="button"
                 onClick={handleCapture}
                 disabled={!isReady}
                 aria-label="Take Selfie"
-                className="relative group p-1 rounded-full bg-white/20 hover:bg-white/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative group p-1.5 rounded-full bg-[#f39c12]/30 hover:bg-[#f39c12]/50 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(243,156,18,0.4)]"
               >
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-95 transition-transform">
-                  <div className="w-14 h-14 rounded-full border-2 border-zinc-950 bg-white flex items-center justify-center">
-                    <Camera className="w-6 h-6 text-zinc-900" />
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#ffd700] via-[#f39c12] to-[#b78103] flex items-center justify-center shadow-lg group-hover:scale-95 transition-transform">
+                  <div className="w-13 h-13 rounded-full border border-[#0a0705] bg-[#0a0705] flex items-center justify-center">
+                    <Camera className="w-6 h-6 text-[#ffd700]" />
                   </div>
                 </div>
               </button>
 
-              {/* Spacer for symmetrical layout */}
               <div className="w-12 h-12" />
             </div>
           </>
         )}
       </div>
 
-      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -271,10 +257,9 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
         onChange={handleFileUpload}
       />
 
-      {/* Privacy note */}
-      <div className="mt-4 flex items-center justify-center gap-2 text-xs text-zinc-400 text-center">
-        <Sparkles className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-        <span>Your selfie is used only to find your event photos and is never stored.</span>
+      <div className="mt-4 flex items-center justify-center gap-2 text-xs text-[#a89680] text-center font-heading tracking-wide">
+        <Sparkles className="w-3.5 h-3.5 text-[#ffd700] shrink-0" />
+        <span>Your selfie is used solely to discover your Odyssey photos and is never stored.</span>
       </div>
     </div>
   );

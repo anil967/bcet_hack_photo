@@ -10,40 +10,38 @@ interface EmptyStateProps {
 export function EmptyState({ onRetry }: EmptyStateProps) {
   return (
     <div className="w-full max-w-md mx-auto py-12 px-6 flex flex-col items-center text-center">
-      {/* Icon */}
-      <div className="w-16 h-16 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-6 shadow-xl">
+      <div className="w-16 h-16 rounded-full bg-[#1c130b] border border-[#f39c12]/40 flex items-center justify-center text-[#ffd700] mb-6 shadow-xl">
         <SearchX className="w-8 h-8" />
       </div>
 
-      <h3 className="text-xl font-bold text-zinc-100 tracking-tight">
-        No Matching Photos Found
+      <h3 className="text-2xl font-heading font-bold text-white tracking-wide bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
+        No Matching Moments Found
       </h3>
 
-      <p className="text-sm text-zinc-400 mt-2 max-w-sm leading-relaxed">
-        We couldn't find any event photos matching your selfie.
+      <p className="text-xs sm:text-sm text-[#a89680] font-body mt-2 max-w-sm leading-relaxed">
+        We could not find any event photos matching your selfie in the Odyssey gallery.
       </p>
 
-      {/* Advice Card */}
-      <div className="w-full mt-6 p-4 rounded-xl bg-zinc-900/50 border border-zinc-800 text-left text-xs text-zinc-300 space-y-2">
-        <div className="flex items-center gap-1.5 font-medium text-zinc-200">
-          <Lightbulb className="w-4 h-4 text-amber-400" />
-          <span>Tips for a better match:</span>
+      {/* Advice Box */}
+      <div className="w-full mt-6 p-4 bg-[#140c06] border border-[#f39c12]/30 text-left text-xs text-[#d8c7b2] space-y-2">
+        <div className="flex items-center gap-1.5 font-heading font-semibold text-[#ffd700]">
+          <Lightbulb className="w-4 h-4 text-[#ffd700]" />
+          <span>Tips for a clearer match:</span>
         </div>
-        <ul className="list-disc list-inside space-y-1 text-zinc-400 pl-1">
-          <li>Ensure good, even lighting on your face</li>
-          <li>Look directly toward the camera</li>
-          <li>Make sure only one person is in the frame</li>
-          <li>Remove sunglasses, hats, or heavy facial obstructions</li>
+        <ul className="list-disc list-inside space-y-1 text-[#a89680] font-body pl-1">
+          <li>Ensure bright, direct lighting on your face</li>
+          <li>Look directly toward the camera lens</li>
+          <li>Ensure only one person is in the frame</li>
+          <li>Remove dark glasses or face coverings</li>
         </ul>
       </div>
 
-      {/* Action CTA */}
       <button
         type="button"
         onClick={onRetry}
-        className="mt-8 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold text-sm shadow-lg shadow-indigo-600/20 transition"
+        className="mt-8 flex items-center justify-center gap-2 px-6 py-3 gold-action-btn font-heading text-xs tracking-wider uppercase"
       >
-        <RotateCcw className="w-4 h-4" />
+        <RotateCcw className="w-4 h-4 text-[#0a0705]" />
         <span>Try Another Selfie</span>
       </button>
     </div>
