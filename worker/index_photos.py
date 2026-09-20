@@ -60,6 +60,12 @@ def run_incremental_indexer(data_dir: str = None) -> dict:
         remove_set = set(to_remove)
         for rid in to_remove:
             processed_data.pop(rid, None)
+            thumb_file = os.path.join(data_dir, "thumbnails", f"{rid}_thumb.jpg")
+            if os.path.exists(thumb_file):
+                try:
+                    os.remove(thumb_file)
+                except Exception:
+                    pass
 
         remaining_meta = {}
         kept_vectors = []
