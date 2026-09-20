@@ -1,0 +1,20 @@
+{
+  "event_001_team.jpg": {
+    "modified_time": "1789880868.1855867",
+    "status": "processed",
+    "faces_detected": 17,
+    "indexed_at": "2026-09-20T05:11:13.785329"
+  },
+  "event_002_booth.jpg": {
+    "modified_time": "1789880868.1855867",
+    "status": "processed",
+    "faces_detected": 11,
+    "indexed_at": "2026-09-20T05:11:13.886663"
+  },
+  "event_003_awards.jpg": {
+    "modified_time": "1789880868.1855867",
+    "status": "processed",
+    "faces_detected": 96,
+    "indexed_at": "2026-09-20T05:11:14.419006"
+  }
+}

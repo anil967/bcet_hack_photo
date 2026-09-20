@@ -1,6 +1,0 @@
-{
-  "name": "PhotoFinder",
-  "description": "Find your event moments by entering your registration ID and taking a quick selfie.",
-  "requestFramePermissions": ["camera"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

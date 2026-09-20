@@ -1,8 +1,30 @@
+# Dependencies
 node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+credentials.json
+token.json
+
+# Next.js build output
+.next/
+out/
 build/
 dist/
-coverage/
-.DS_Store
+
+# FAISS and Data
+# Keep sample photos and schema, ignore generated index binaries if requested
 *.log
-.env*
-!.env.example
+.DS_Store
+Thumbs.db
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
