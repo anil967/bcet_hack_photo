@@ -20,7 +20,11 @@ def test_health():
     print("PASS: Health endpoint works!")
 
 def test_search_photos_success():
-    selfie_path = "data/test_selfie.jpg"
+    uploaded_portrait = r"C:\Users\anilp\.gemini\antigravity-ide\brain\9221337f-32f7-4406-a24c-8c4606ee04af\.user_uploaded\media_1789886273851.png"
+    if os.path.exists(uploaded_portrait):
+        selfie_path = uploaded_portrait
+    else:
+        selfie_path = "data/test_selfie.jpg"
     assert os.path.exists(selfie_path), "Sample selfie not found"
     
     with open(selfie_path, "rb") as f:

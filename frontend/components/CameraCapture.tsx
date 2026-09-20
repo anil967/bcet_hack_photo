@@ -189,14 +189,14 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
               } ${isReady ? "opacity-100" : "opacity-0"}`}
             />
 
-            {/* Golden Face Guide Oval: Scaled for screen height */}
+            {/* Golden Face Guide Oval: Calibrated & proportional for mobile screens */}
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="w-44 h-60 sm:w-56 sm:h-72 rounded-[50%] border-2 border-dashed border-[#ffd700]/70 shadow-[0_0_25px_rgba(243,156,18,0.35)] flex flex-col items-center justify-between py-4">
-                <span className="text-[10px] sm:text-[11px] font-heading font-semibold uppercase tracking-[0.16em] text-[#ffd700] bg-[#0c0805]/90 px-2.5 py-0.5 border border-[#f39c12]/50 backdrop-blur-sm">
+              <div className="w-[62%] max-w-[210px] aspect-[3/4] rounded-[50%] border-2 border-dashed border-[#ffd700]/70 shadow-[0_0_25px_rgba(243,156,18,0.3)] flex flex-col items-center justify-between py-3 sm:py-4">
+                <span className="text-[9px] sm:text-[10px] font-heading font-semibold uppercase tracking-[0.15em] text-[#ffd700] bg-[#0c0805]/85 px-2 py-0.5 border border-[#f39c12]/40 rounded-sm backdrop-blur-sm shadow-sm">
                   Position Face Here
                 </span>
-                <span className="text-[9px] sm:text-[10px] font-heading tracking-wider text-[#d4b96a] bg-[#0c0805]/85 px-2 py-0.5 border border-[#f39c12]/30">
-                  Single person only
+                <span className="text-[8px] sm:text-[9px] font-heading tracking-wider text-[#d4b96a] bg-[#0c0805]/80 px-2 py-0.5 border border-[#f39c12]/30 rounded-sm">
+                  Single Person
                 </span>
               </div>
             </div>

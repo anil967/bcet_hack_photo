@@ -1,193 +1,17 @@
 {
   "0": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
+    "file_id": "1eQAPrVAfpyf3F5kInGfkWdj3iOdz-seT",
+    "file_name": "ChatGPT Image Sep 20, 2026, 12_04_26 PM.png",
     "face_index": 0,
     "box": {
-      "x": 273.5247802734375,
-      "y": 346.1590881347656,
-      "w": 95.26361083984375,
-      "h": 121.44074249267578
+      "x": 354.4122314453125,
+      "y": 375.62939453125,
+      "w": 376.8865051269531,
+      "h": 496.9395751953125
     }
   },
   "1": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 1,
-    "box": {
-      "x": 469.50616455078125,
-      "y": 260.5843505859375,
-      "w": 95.58629608154297,
-      "h": 127.82461547851562
-    }
-  },
-  "2": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 2,
-    "box": {
-      "x": 665.5692749023438,
-      "y": 355.692626953125,
-      "w": 99.3046875,
-      "h": 122.43782806396484
-    }
-  },
-  "3": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 3,
-    "box": {
-      "x": 89.58033752441406,
-      "y": 477.8036804199219,
-      "w": 46.64768600463867,
-      "h": 62.97359085083008
-    }
-  },
-  "4": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 4,
-    "box": {
-      "x": 999.292236328125,
-      "y": 368.92144775390625,
-      "w": 23.334327697753906,
-      "h": 31.319835662841797
-    }
-  },
-  "5": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 5,
-    "box": {
-      "x": 932.065185546875,
-      "y": 472.57470703125,
-      "w": 48.38196563720703,
-      "h": 62.43718338012695
-    }
-  },
-  "6": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 6,
-    "box": {
-      "x": 893.3250122070312,
-      "y": 334.57366943359375,
-      "w": 20.285982131958008,
-      "h": 27.065109252929688
-    }
-  },
-  "7": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 7,
-    "box": {
-      "x": 952.9708251953125,
-      "y": 329.3807067871094,
-      "w": 18.39471435546875,
-      "h": 22.056821823120117
-    }
-  },
-  "8": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 8,
-    "box": {
-      "x": 70.2787857055664,
-      "y": 337.802001953125,
-      "w": 19.78480339050293,
-      "h": 26.050138473510742
-    }
-  },
-  "9": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 9,
-    "box": {
-      "x": 137.0281524658203,
-      "y": 330.5307922363281,
-      "w": 19.26565933227539,
-      "h": 23.78209686279297
-    }
-  },
-  "10": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 10,
-    "box": {
-      "x": 19.97061538696289,
-      "y": 345.715087890625,
-      "w": 15.988462448120117,
-      "h": 21.511638641357422
-    }
-  },
-  "11": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 11,
-    "box": {
-      "x": 868.2283935546875,
-      "y": 447.9640808105469,
-      "w": 24.93630027770996,
-      "h": 39.08860778808594
-    }
-  },
-  "12": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 12,
-    "box": {
-      "x": -4.086376190185547,
-      "y": 783.533447265625,
-      "w": 112.02496337890625,
-      "h": 230.71063232421875
-    }
-  },
-  "13": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 13,
-    "box": {
-      "x": 90.62190246582031,
-      "y": 356.81011962890625,
-      "w": 18.751996994018555,
-      "h": 27.800823211669922
-    }
-  },
-  "14": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 14,
-    "box": {
-      "x": 253.34547424316406,
-      "y": 335.8670654296875,
-      "w": 17.022737503051758,
-      "h": 22.726043701171875
-    }
-  },
-  "15": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 15,
-    "box": {
-      "x": 907.1510620117188,
-      "y": 420.7651672363281,
-      "w": 29.917224884033203,
-      "h": 36.30601119995117
-    }
-  },
-  "16": {
-    "file_id": "event_001_team.jpg",
-    "file_name": "event_001_team.jpg",
-    "face_index": 16,
-    "box": {
-      "x": 361.9638671875,
-      "y": 330.8719787597656,
-      "w": 18.1357364654541,
-      "h": 23.91876220703125
-    }
-  },
-  "17": {
-    "file_id": "event_002_booth.jpg",
+    "file_id": "1dc1rk35e5_OQz3QTsYwVKlun9x-MUdwo",
     "file_name": "event_002_booth.jpg",
     "face_index": 0,
     "box": {
@@ -197,8 +21,8 @@
       "h": 179.05882263183594
     }
   },
-  "18": {
-    "file_id": "event_002_booth.jpg",
+  "2": {
+    "file_id": "1dc1rk35e5_OQz3QTsYwVKlun9x-MUdwo",
     "file_name": "event_002_booth.jpg",
     "face_index": 1,
     "box": {
@@ -208,8 +32,8 @@
       "h": 45.49574661254883
     }
   },
-  "19": {
-    "file_id": "event_002_booth.jpg",
+  "3": {
+    "file_id": "1dc1rk35e5_OQz3QTsYwVKlun9x-MUdwo",
     "file_name": "event_002_booth.jpg",
     "face_index": 2,
     "box": {
@@ -219,41 +43,8 @@
       "h": 50.352333068847656
     }
   },
-  "20": {
-    "file_id": "event_002_booth.jpg",
-    "file_name": "event_002_booth.jpg",
-    "face_index": 3,
-    "box": {
-      "x": 795.4501953125,
-      "y": 395.9024963378906,
-      "w": 21.466556549072266,
-      "h": 27.620357513427734
-    }
-  },
-  "21": {
-    "file_id": "event_002_booth.jpg",
-    "file_name": "event_002_booth.jpg",
-    "face_index": 4,
-    "box": {
-      "x": 765.7457275390625,
-      "y": 358.4469909667969,
-      "w": 23.410369873046875,
-      "h": 33.964603424072266
-    }
-  },
-  "22": {
-    "file_id": "event_002_booth.jpg",
-    "file_name": "event_002_booth.jpg",
-    "face_index": 5,
-    "box": {
-      "x": 28.017948150634766,
-      "y": 397.8320617675781,
-      "w": 28.681541442871094,
-      "h": 48.28273391723633
-    }
-  },
-  "23": {
-    "file_id": "event_002_booth.jpg",
+  "4": {
+    "file_id": "1dc1rk35e5_OQz3QTsYwVKlun9x-MUdwo",
     "file_name": "event_002_booth.jpg",
     "face_index": 6,
     "box": {
@@ -263,52 +54,74 @@
       "h": 200.3765869140625
     }
   },
-  "24": {
-    "file_id": "event_002_booth.jpg",
-    "file_name": "event_002_booth.jpg",
-    "face_index": 7,
+  "5": {
+    "file_id": "187YykXjE05swhTi5Z274JeL4vOF_Dkmv",
+    "file_name": "event_001_team.jpg",
+    "face_index": 0,
     "box": {
-      "x": 727.6595458984375,
-      "y": 384.8036804199219,
-      "w": 28.12203598022461,
-      "h": 52.472652435302734
+      "x": 273.5247802734375,
+      "y": 346.1590881347656,
+      "w": 95.26361083984375,
+      "h": 121.44074249267578
     }
   },
-  "25": {
-    "file_id": "event_002_booth.jpg",
-    "file_name": "event_002_booth.jpg",
-    "face_index": 8,
+  "6": {
+    "file_id": "187YykXjE05swhTi5Z274JeL4vOF_Dkmv",
+    "file_name": "event_001_team.jpg",
+    "face_index": 1,
     "box": {
-      "x": 211.55169677734375,
-      "y": 412.8936462402344,
-      "w": 31.758230209350586,
-      "h": 52.71171951293945
+      "x": 469.50616455078125,
+      "y": 260.5843505859375,
+      "w": 95.58629608154297,
+      "h": 127.82461547851562
     }
   },
-  "26": {
-    "file_id": "event_002_booth.jpg",
-    "file_name": "event_002_booth.jpg",
-    "face_index": 9,
+  "7": {
+    "file_id": "187YykXjE05swhTi5Z274JeL4vOF_Dkmv",
+    "file_name": "event_001_team.jpg",
+    "face_index": 2,
     "box": {
-      "x": 153.77279663085938,
-      "y": 366.4421081542969,
-      "w": 26.371946334838867,
-      "h": 39.377201080322266
+      "x": 665.5692749023438,
+      "y": 355.692626953125,
+      "w": 99.3046875,
+      "h": 122.43782806396484
     }
   },
-  "27": {
-    "file_id": "event_002_booth.jpg",
-    "file_name": "event_002_booth.jpg",
-    "face_index": 10,
+  "8": {
+    "file_id": "187YykXjE05swhTi5Z274JeL4vOF_Dkmv",
+    "file_name": "event_001_team.jpg",
+    "face_index": 3,
     "box": {
-      "x": 844.388427734375,
-      "y": 396.9786682128906,
-      "w": 21.001754760742188,
-      "h": 26.986007690429688
+      "x": 89.58033752441406,
+      "y": 477.8036804199219,
+      "w": 46.64768600463867,
+      "h": 62.97359085083008
     }
   },
-  "28": {
-    "file_id": "event_003_awards.jpg",
+  "9": {
+    "file_id": "187YykXjE05swhTi5Z274JeL4vOF_Dkmv",
+    "file_name": "event_001_team.jpg",
+    "face_index": 5,
+    "box": {
+      "x": 932.065185546875,
+      "y": 472.57470703125,
+      "w": 48.38196563720703,
+      "h": 62.43718338012695
+    }
+  },
+  "10": {
+    "file_id": "187YykXjE05swhTi5Z274JeL4vOF_Dkmv",
+    "file_name": "event_001_team.jpg",
+    "face_index": 12,
+    "box": {
+      "x": -4.086376190185547,
+      "y": 783.533447265625,
+      "w": 112.02496337890625,
+      "h": 230.71063232421875
+    }
+  },
+  "11": {
+    "file_id": "1qIF7ASQ7CMqcH6vpiZB7CBxtAoAfINY7",
     "file_name": "event_003_awards.jpg",
     "face_index": 0,
     "box": {
@@ -318,8 +131,8 @@
       "h": 98.13026428222656
     }
   },
-  "29": {
-    "file_id": "event_003_awards.jpg",
+  "12": {
+    "file_id": "1qIF7ASQ7CMqcH6vpiZB7CBxtAoAfINY7",
     "file_name": "event_003_awards.jpg",
     "face_index": 1,
     "box": {
@@ -329,8 +142,8 @@
       "h": 61.66029357910156
     }
   },
-  "30": {
-    "file_id": "event_003_awards.jpg",
+  "13": {
+    "file_id": "1qIF7ASQ7CMqcH6vpiZB7CBxtAoAfINY7",
     "file_name": "event_003_awards.jpg",
     "face_index": 2,
     "box": {
@@ -340,19 +153,8 @@
       "h": 54.77549743652344
     }
   },
-  "31": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 3,
-    "box": {
-      "x": 917.778564453125,
-      "y": 467.55279541015625,
-      "w": 18.44908905029297,
-      "h": 23.771142959594727
-    }
-  },
-  "32": {
-    "file_id": "event_003_awards.jpg",
+  "14": {
+    "file_id": "1qIF7ASQ7CMqcH6vpiZB7CBxtAoAfINY7",
     "file_name": "event_003_awards.jpg",
     "face_index": 4,
     "box": {
@@ -362,63 +164,8 @@
       "h": 66.02518463134766
     }
   },
-  "33": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 5,
-    "box": {
-      "x": 814.0419921875,
-      "y": 449.65716552734375,
-      "w": 16.171384811401367,
-      "h": 22.140972137451172
-    }
-  },
-  "34": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 6,
-    "box": {
-      "x": 864.7772216796875,
-      "y": 435.84930419921875,
-      "w": 17.379302978515625,
-      "h": 21.398326873779297
-    }
-  },
-  "35": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 7,
-    "box": {
-      "x": 943.4635009765625,
-      "y": 419.8323974609375,
-      "w": 15.019250869750977,
-      "h": 18.980932235717773
-    }
-  },
-  "36": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 8,
-    "box": {
-      "x": 149.09902954101562,
-      "y": 449.263427734375,
-      "w": 20.387191772460938,
-      "h": 25.262985229492188
-    }
-  },
-  "37": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 9,
-    "box": {
-      "x": 924.547119140625,
-      "y": 439.12847900390625,
-      "w": 17.29619789123535,
-      "h": 21.426725387573242
-    }
-  },
-  "38": {
-    "file_id": "event_003_awards.jpg",
+  "15": {
+    "file_id": "1qIF7ASQ7CMqcH6vpiZB7CBxtAoAfINY7",
     "file_name": "event_003_awards.jpg",
     "face_index": 10,
     "box": {
@@ -428,939 +175,15 @@
       "h": 107.95325469970703
     }
   },
-  "39": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 11,
-    "box": {
-      "x": 226.56016540527344,
-      "y": 439.8211669921875,
-      "w": 18.48187255859375,
-      "h": 22.95170783996582
-    }
-  },
-  "40": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 12,
-    "box": {
-      "x": 147.92898559570312,
-      "y": 423.7549743652344,
-      "w": 15.707639694213867,
-      "h": 18.772809982299805
-    }
-  },
-  "41": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 13,
-    "box": {
-      "x": 440.76068115234375,
-      "y": 420.4974670410156,
-      "w": 17.0406494140625,
-      "h": 22.07155990600586
-    }
-  },
-  "42": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 14,
-    "box": {
-      "x": 998.5591430664062,
-      "y": 459.5530700683594,
-      "w": 17.26700210571289,
-      "h": 23.17848777770996
-    }
-  },
-  "43": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 15,
-    "box": {
-      "x": 127.67560577392578,
-      "y": 441.3677673339844,
-      "w": 15.886580467224121,
-      "h": 21.535703659057617
-    }
-  },
-  "44": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 16,
-    "box": {
-      "x": 1005.8997802734375,
-      "y": 432.1023254394531,
-      "w": 14.779875755310059,
-      "h": 19.575105667114258
-    }
-  },
-  "45": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 17,
-    "box": {
-      "x": 776.488525390625,
-      "y": 435.24755859375,
-      "w": 16.389225006103516,
-      "h": 21.424976348876953
-    }
-  },
-  "46": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 18,
-    "box": {
-      "x": 11.69029426574707,
-      "y": 456.9239807128906,
-      "w": 18.422374725341797,
-      "h": 21.797622680664062
-    }
-  },
-  "47": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 19,
-    "box": {
-      "x": 71.77067565917969,
-      "y": 451.12872314453125,
-      "w": 19.454431533813477,
-      "h": 24.695344924926758
-    }
-  },
-  "48": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 20,
-    "box": {
-      "x": 283.6225891113281,
-      "y": 434.1793212890625,
-      "w": 13.562159538269043,
-      "h": 16.81834602355957
-    }
-  },
-  "49": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 21,
-    "box": {
-      "x": 257.4243469238281,
-      "y": 426.32513427734375,
-      "w": 13.59567928314209,
-      "h": 17.798192977905273
-    }
-  },
-  "50": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 22,
-    "box": {
-      "x": 643.9989013671875,
-      "y": 456.0058898925781,
-      "w": 16.073822021484375,
-      "h": 20.784208297729492
-    }
-  },
-  "51": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 23,
-    "box": {
-      "x": 907.1755981445312,
-      "y": 397.93994140625,
-      "w": 11.935375213623047,
-      "h": 15.152301788330078
-    }
-  },
-  "52": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 24,
-    "box": {
-      "x": 799.80908203125,
-      "y": 410.663818359375,
-      "w": 15.626056671142578,
-      "h": 20.685150146484375
-    }
-  },
-  "53": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 25,
-    "box": {
-      "x": 201.359375,
-      "y": 426.5818176269531,
-      "w": 13.31016731262207,
-      "h": 18.30485725402832
-    }
-  },
-  "54": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 26,
-    "box": {
-      "x": 672.1952514648438,
-      "y": 437.0286865234375,
-      "w": 14.828296661376953,
-      "h": 19.7349853515625
-    }
-  },
-  "55": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 27,
-    "box": {
-      "x": 387.3656921386719,
-      "y": 434.49896240234375,
-      "w": 16.876094818115234,
-      "h": 22.895965576171875
-    }
-  },
-  "56": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 28,
-    "box": {
-      "x": 754.2872924804688,
-      "y": 397.81500244140625,
-      "w": 11.196305274963379,
-      "h": 14.847199440002441
-    }
-  },
-  "57": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 29,
-    "box": {
-      "x": 447.7910461425781,
-      "y": 404.1853332519531,
-      "w": 11.723596572875977,
-      "h": 16.503135681152344
-    }
-  },
-  "58": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 30,
-    "box": {
-      "x": 694.930908203125,
-      "y": 417.8117370605469,
-      "w": 12.858485221862793,
-      "h": 17.426616668701172
-    }
-  },
-  "59": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 31,
-    "box": {
-      "x": 973.3212890625,
-      "y": 424.4765319824219,
-      "w": 11.714381217956543,
-      "h": 14.995933532714844
-    }
-  },
-  "60": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 32,
-    "box": {
-      "x": 33.281192779541016,
-      "y": 429.201904296875,
-      "w": 14.09835147857666,
-      "h": 16.646724700927734
-    }
-  },
-  "61": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 33,
-    "box": {
-      "x": 883.5584716796875,
-      "y": 401.701904296875,
-      "w": 10.077990531921387,
-      "h": 13.176006317138672
-    }
-  },
-  "62": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 34,
-    "box": {
-      "x": 713.127685546875,
-      "y": 407.2218933105469,
-      "w": 12.839969635009766,
-      "h": 16.02613067626953
-    }
-  },
-  "63": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 35,
-    "box": {
-      "x": 203.0022430419922,
-      "y": 410.60638427734375,
-      "w": 10.437225341796875,
-      "h": 13.106407165527344
-    }
-  },
-  "64": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 36,
-    "box": {
-      "x": 109.34111785888672,
-      "y": 391.2900390625,
-      "w": 10.017334938049316,
-      "h": 13.416630744934082
-    }
-  },
-  "65": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 37,
-    "box": {
-      "x": 964.319091796875,
-      "y": 160.8668975830078,
-      "w": 9.302387237548828,
-      "h": 11.767224311828613
-    }
-  },
-  "66": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 38,
-    "box": {
-      "x": 567.3653564453125,
-      "y": 405.4233703613281,
-      "w": 11.124641418457031,
-      "h": 14.48362922668457
-    }
-  },
-  "67": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 39,
-    "box": {
-      "x": 924.1762084960938,
-      "y": 407.7540283203125,
-      "w": 13.561430931091309,
-      "h": 16.695844650268555
-    }
-  },
-  "68": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 40,
-    "box": {
-      "x": 846.3345947265625,
-      "y": 411.4792175292969,
-      "w": 12.092781066894531,
-      "h": 15.63830852508545
-    }
-  },
-  "69": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 41,
-    "box": {
-      "x": 868.2183837890625,
-      "y": 411.7851867675781,
-      "w": 10.60238265991211,
-      "h": 13.016671180725098
-    }
-  },
-  "70": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 42,
-    "box": {
-      "x": 999.7232666015625,
-      "y": 162.7574005126953,
-      "w": 9.991079330444336,
-      "h": 12.53213119506836
-    }
-  },
-  "71": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 43,
-    "box": {
-      "x": 803.2459716796875,
-      "y": 396.741943359375,
-      "w": 11.024251937866211,
-      "h": 14.760982513427734
-    }
-  },
-  "72": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 44,
-    "box": {
-      "x": 124.7654037475586,
-      "y": 415.4935607910156,
-      "w": 12.383862495422363,
-      "h": 15.640195846557617
-    }
-  },
-  "73": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 45,
-    "box": {
-      "x": 149.84182739257812,
-      "y": 396.5550231933594,
-      "w": 13.898760795593262,
-      "h": 16.889692306518555
-    }
-  },
-  "74": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 46,
-    "box": {
-      "x": 664.2095336914062,
-      "y": 383.6556396484375,
-      "w": 8.090015411376953,
-      "h": 10.5824556350708
-    }
-  },
-  "75": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 47,
-    "box": {
-      "x": 32.19224166870117,
-      "y": 402.6368408203125,
-      "w": 8.51939582824707,
-      "h": 10.873032569885254
-    }
-  },
-  "76": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 48,
-    "box": {
-      "x": 557.1245727539062,
-      "y": 398.9684143066406,
-      "w": 10.420159339904785,
-      "h": 13.521038055419922
-    }
-  },
-  "77": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 49,
-    "box": {
-      "x": 63.56074142456055,
-      "y": 397.1955261230469,
-      "w": 8.476587295532227,
-      "h": 10.596324920654297
-    }
-  },
-  "78": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 50,
-    "box": {
-      "x": 562.394287109375,
-      "y": 401.8105163574219,
-      "w": 9.472954750061035,
-      "h": 12.251840591430664
-    }
-  },
-  "79": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 51,
-    "box": {
-      "x": 843.484375,
-      "y": 395.19915771484375,
-      "w": 9.840265274047852,
-      "h": 12.376419067382812
-    }
-  },
-  "80": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 52,
-    "box": {
-      "x": 11.937519073486328,
-      "y": 394.9521484375,
-      "w": 8.87314510345459,
-      "h": 11.392906188964844
-    }
-  },
-  "81": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 53,
-    "box": {
-      "x": 782.80859375,
-      "y": 396.5515441894531,
-      "w": 10.478071212768555,
-      "h": 13.54150676727295
-    }
-  },
-  "82": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 54,
-    "box": {
-      "x": 677.406005859375,
-      "y": 398.1254577636719,
-      "w": 9.12563705444336,
-      "h": 11.342963218688965
-    }
-  },
-  "83": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 55,
-    "box": {
-      "x": 757.0736694335938,
-      "y": 390.2890319824219,
-      "w": 10.237422943115234,
-      "h": 13.833478927612305
-    }
-  },
-  "84": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 56,
-    "box": {
-      "x": 987.58056640625,
-      "y": 396.6460876464844,
-      "w": 8.271017074584961,
-      "h": 10.922240257263184
-    }
-  },
-  "85": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 57,
-    "box": {
-      "x": 428.3932800292969,
-      "y": 410.3966369628906,
-      "w": 13.23962688446045,
-      "h": 17.41573143005371
-    }
-  },
-  "86": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 58,
-    "box": {
-      "x": 169.8704376220703,
-      "y": 411.81475830078125,
-      "w": 13.55774211883545,
-      "h": 16.5775089263916
-    }
-  },
-  "87": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 59,
-    "box": {
-      "x": 982.1204223632812,
-      "y": 412.5198669433594,
-      "w": 9.657215118408203,
-      "h": 12.874883651733398
-    }
-  },
-  "88": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 60,
-    "box": {
-      "x": 1015.0851440429688,
-      "y": 411.5113830566406,
-      "w": 10.17261028289795,
-      "h": 15.305073738098145
-    }
-  },
-  "89": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 61,
-    "box": {
-      "x": 937.4684448242188,
-      "y": 386.9574890136719,
-      "w": 9.281031608581543,
-      "h": 12.19178581237793
-    }
-  },
-  "90": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 62,
-    "box": {
-      "x": 394.9990539550781,
-      "y": 428.3543395996094,
-      "w": 14.671334266662598,
-      "h": 21.332895278930664
-    }
-  },
-  "91": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 63,
-    "box": {
-      "x": 11.98967170715332,
-      "y": 160.8528594970703,
-      "w": 8.549874305725098,
-      "h": 10.573953628540039
-    }
-  },
-  "92": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 64,
-    "box": {
-      "x": 614.8793334960938,
-      "y": 366.1679382324219,
-      "w": 7.7368316650390625,
-      "h": 9.360299110412598
-    }
-  },
-  "93": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 65,
-    "box": {
-      "x": 38.965057373046875,
-      "y": 391.6018981933594,
-      "w": 7.694515228271484,
-      "h": 9.833984375
-    }
-  },
-  "94": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 66,
-    "box": {
-      "x": 927.7796020507812,
-      "y": 372.5720520019531,
-      "w": 7.506122589111328,
-      "h": 9.438400268554688
-    }
-  },
-  "95": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 67,
-    "box": {
-      "x": 243.8056182861328,
-      "y": 409.30010986328125,
-      "w": 11.052684783935547,
-      "h": 14.039453506469727
-    }
-  },
-  "96": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 68,
-    "box": {
-      "x": 192.6714630126953,
-      "y": 393.76416015625,
-      "w": 9.70819091796875,
-      "h": 12.240311622619629
-    }
-  },
-  "97": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 69,
-    "box": {
-      "x": 762.2109375,
-      "y": 384.3082275390625,
-      "w": 8.32061767578125,
-      "h": 11.436275482177734
-    }
-  },
-  "98": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 70,
-    "box": {
-      "x": 977.6231079101562,
-      "y": 420.37713623046875,
-      "w": 11.45118236541748,
-      "h": 14.655439376831055
-    }
-  },
-  "99": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 71,
-    "box": {
-      "x": 545.6512451171875,
-      "y": 370.8467712402344,
-      "w": 7.839932441711426,
-      "h": 10.191903114318848
-    }
-  },
-  "100": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 72,
-    "box": {
-      "x": 866.9212036132812,
-      "y": 372.9859619140625,
-      "w": 7.7773756980896,
-      "h": 10.184173583984375
-    }
-  },
-  "101": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 73,
-    "box": {
-      "x": 909.064453125,
-      "y": 378.8822326660156,
-      "w": 9.38123893737793,
-      "h": 11.982194900512695
-    }
-  },
-  "102": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 74,
-    "box": {
-      "x": 560.900146484375,
-      "y": 383.6137390136719,
-      "w": 8.624917984008789,
-      "h": 11.313759803771973
-    }
-  },
-  "103": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 75,
-    "box": {
-      "x": 630.2396850585938,
-      "y": 364.6817626953125,
-      "w": 7.734388828277588,
-      "h": 9.63109016418457
-    }
-  },
-  "104": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 76,
-    "box": {
-      "x": 464.8831481933594,
-      "y": 363.79083251953125,
-      "w": 6.901160717010498,
-      "h": 8.738800048828125
-    }
-  },
-  "105": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 77,
-    "box": {
-      "x": 577.9344482421875,
-      "y": 373.6871337890625,
-      "w": 7.57136869430542,
-      "h": 9.751304626464844
-    }
-  },
-  "106": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 78,
-    "box": {
-      "x": 35.85009002685547,
-      "y": 171.0758514404297,
-      "w": 8.205780029296875,
-      "h": 9.839564323425293
-    }
-  },
-  "107": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 79,
-    "box": {
-      "x": 641.671875,
-      "y": 379.2207946777344,
-      "w": 7.8107805252075195,
-      "h": 9.937260627746582
-    }
-  },
-  "108": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 80,
-    "box": {
-      "x": 106.1943588256836,
-      "y": 436.0906066894531,
-      "w": 12.130956649780273,
-      "h": 16.674457550048828
-    }
-  },
-  "109": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 81,
-    "box": {
-      "x": 669.2879638671875,
-      "y": 410.3797607421875,
-      "w": 11.220025062561035,
-      "h": 15.032288551330566
-    }
-  },
-  "110": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 82,
-    "box": {
-      "x": 727.9669799804688,
-      "y": 380.29248046875,
-      "w": 9.613325119018555,
-      "h": 11.707098960876465
-    }
-  },
-  "111": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 83,
-    "box": {
-      "x": 71.30072784423828,
-      "y": 417.8337707519531,
-      "w": 10.93733024597168,
-      "h": 13.955254554748535
-    }
-  },
-  "112": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 84,
-    "box": {
-      "x": 239.3333740234375,
-      "y": 381.4296569824219,
-      "w": 7.573419094085693,
-      "h": 9.41493034362793
-    }
-  },
-  "113": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 85,
-    "box": {
-      "x": 157.9246826171875,
-      "y": 381.2274169921875,
-      "w": 9.955123901367188,
-      "h": 12.465499877929688
-    }
-  },
-  "114": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 86,
-    "box": {
-      "x": 471.189453125,
-      "y": 392.41607666015625,
-      "w": 10.97896957397461,
-      "h": 13.547393798828125
-    }
-  },
-  "115": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 87,
-    "box": {
-      "x": 457.7398376464844,
-      "y": 385.9797668457031,
-      "w": 8.869333267211914,
-      "h": 11.224717140197754
-    }
-  },
-  "116": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 88,
-    "box": {
-      "x": 955.994140625,
-      "y": 381.2398986816406,
-      "w": 8.58380126953125,
-      "h": 11.222593307495117
-    }
-  },
-  "117": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 89,
-    "box": {
-      "x": 705.7101440429688,
-      "y": 369.59796142578125,
-      "w": 6.636033058166504,
-      "h": 8.26352596282959
-    }
-  },
-  "118": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 90,
-    "box": {
-      "x": 246.4021453857422,
-      "y": 390.402587890625,
-      "w": 7.7857866287231445,
-      "h": 9.888463020324707
-    }
-  },
-  "119": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 91,
-    "box": {
-      "x": 257.90283203125,
-      "y": 378.3287353515625,
-      "w": 7.123462677001953,
-      "h": 8.898736953735352
-    }
-  },
-  "120": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 92,
-    "box": {
-      "x": 561.0902099609375,
-      "y": 359.87646484375,
-      "w": 6.956171989440918,
-      "h": 8.825035095214844
-    }
-  },
-  "121": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 93,
-    "box": {
-      "x": 433.547119140625,
-      "y": 381.6053771972656,
-      "w": 9.35695743560791,
-      "h": 12.034333229064941
-    }
-  },
-  "122": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 94,
-    "box": {
-      "x": 699.526123046875,
-      "y": 379.3044128417969,
-      "w": 6.655821800231934,
-      "h": 8.540098190307617
-    }
-  },
-  "123": {
-    "file_id": "event_003_awards.jpg",
-    "file_name": "event_003_awards.jpg",
-    "face_index": 95,
-    "box": {
-      "x": 839.796630859375,
-      "y": 371.2170104980469,
-      "w": 7.187574863433838,
-      "h": 8.811269760131836
+  "16": {
+    "file_id": "1D-wsIPR8juJdF9X-6dFOJ_mlxm8siJUV",
+    "file_name": "ChatGPT Image Sep 20, 2026, 12_20_02 PM.png",
+    "face_index": 0,
+    "box": {
+      "x": 383.46484375,
+      "y": 316.72686767578125,
+      "w": 253.85226440429688,
+      "h": 333.6023864746094
     }
   }
 }

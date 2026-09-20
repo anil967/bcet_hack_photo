@@ -170,6 +170,11 @@ class FaceService:
 
         for idx, face in enumerate(faces):
             try:
+                # Filter out tiny blurry background faces (less than 35px) and low confidence detections
+                # Face layout: [x, y, w, h, x_re, y_re, x_le, y_le, x_nt, y_nt, x_rc, y_rc, x_lc, y_lc, score]
+                if face[2] < 35 or face[3] < 35 or face[-1] < 0.65:
+                    continue
+
                 aligned = self.recognizer.alignCrop(img_bgr, face)
                 feature = self.recognizer.feature(aligned)
                 norm = np.linalg.norm(feature)

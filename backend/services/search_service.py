@@ -24,10 +24,11 @@ class SearchService:
         self.dimension = 128 # SFace feature dimension
         self.index: Optional[faiss.Index] = None
         self.metadata: Dict[str, Dict[str, Any]] = {}
+        self._last_loaded_mtime: float = 0.0
         
-        # Load threshold from environment or default to 0.36 (calibrated for SFace cosine similarity)
+        # Default to 0.50 (SFace cosine similarity threshold: true matches > 0.75, false matches < 0.45)
         env_thresh = os.getenv("FACE_MATCH_THRESHOLD")
-        self.match_threshold = float(env_thresh) if env_thresh else 0.36
+        self.match_threshold = float(env_thresh) if env_thresh else 0.50
 
         self.load_index()
 
@@ -38,6 +39,7 @@ class SearchService:
                 self.index = faiss.read_index(self.index_path)
                 with open(self.metadata_path, "r", encoding="utf-8") as f:
                     self.metadata = json.load(f)
+                self._last_loaded_mtime = os.path.getmtime(self.index_path)
                 logger.info(f"Loaded FAISS index with {self.index.ntotal} vectors and {len(self.metadata)} metadata records.")
             except Exception as e:
                 logger.error(f"Error loading FAISS index or metadata: {e}")
@@ -50,6 +52,7 @@ class SearchService:
         logger.info("Initializing new empty FAISS IndexFlatIP.")
         self.index = faiss.IndexFlatIP(self.dimension)
         self.metadata = {}
+        self._last_loaded_mtime = 0.0
 
     @property
     def is_ready(self) -> bool:
@@ -58,11 +61,19 @@ class SearchService:
     def search(self, query_vector: np.ndarray, top_k: int = 100) -> List[Dict[str, Any]]:
         """
         Executes similarity search:
-        1. Queries FAISS Inner Product for top_k vectors.
-        2. Filters matches by match_threshold.
-        3. Deduplicates matching photos by file_id.
-        4. Returns photo items with URLs for display and download.
+        1. Automatically reloads if index on disk has been updated.
+        2. Queries FAISS Inner Product for top_k vectors.
+        3. Filters matches by match_threshold.
+        4. Deduplicates matching photos by file_id.
+        5. Returns photo items with URLs for display and download.
         """
+        # Auto-reload if worker updated the FAISS index file on disk
+        if os.path.exists(self.index_path):
+            current_mtime = os.path.getmtime(self.index_path)
+            if current_mtime != self._last_loaded_mtime:
+                logger.info("Detected updated FAISS index on disk. Reloading search index...")
+                self.load_index()
+
         if not self.is_ready:
             logger.warning("Search called but FAISS index is empty or not loaded.")
             return []

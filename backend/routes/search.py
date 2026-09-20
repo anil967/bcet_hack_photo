@@ -158,7 +158,22 @@ async def download_photo(file_id: str):
     """
     try:
         photo_bytes, mime_type = drive_service.get_photo_bytes(file_id)
-        filename = f"{file_id}.jpg" if not file_id.lower().endswith((".jpg", ".png", ".jpeg")) else file_id
+        
+        # Look up original human-readable filename from metadata
+        filename = f"{file_id}.jpg"
+        found = False
+        for meta in search_service.metadata.values():
+            if meta.get("file_id") == file_id:
+                filename = meta.get("file_name", filename)
+                found = True
+                break
+        if not found and os.path.exists(search_service.index_path):
+            search_service.load_index()
+            for meta in search_service.metadata.values():
+                if meta.get("file_id") == file_id:
+                    filename = meta.get("file_name", filename)
+                    break
+
         return Response(
             content=photo_bytes,
             media_type=mime_type,

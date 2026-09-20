@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: photofinder-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: GOOGLE_DRIVE_FOLDER_ID
+        sync: false
+      - key: GOOGLE_TOKEN_JSON
+        sync: false
+      - key: FACE_MATCH_THRESHOLD
+        value: 0.50
+      - key: STORAGE_MODE
+        value: auto
+      - key: MAX_SELFIE_SIZE_MB
+        value: 2
+      - key: MAX_SEARCH_REQUESTS_PER_MINUTE
+        value: 15
+      - key: ADMIN_SECRET
+        generateValue: true

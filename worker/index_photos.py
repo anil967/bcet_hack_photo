@@ -54,6 +54,36 @@ def run_incremental_indexer(data_dir: str = None) -> dict:
     # 2. Get Sync Plan
     to_process, to_remove, processed_data = get_drive_sync_plan(data_dir)
 
+    # Handle removals: If photos were deleted from Drive/storage, purge them from index
+    if to_remove:
+        logger.info(f"Purging {len(to_remove)} removed photo(s) from index...")
+        remove_set = set(to_remove)
+        for rid in to_remove:
+            processed_data.pop(rid, None)
+
+        remaining_meta = {}
+        kept_vectors = []
+        for str_vid, entry in metadata.items():
+            if entry.get("file_id") not in remove_set:
+                vid = int(str_vid)
+                try:
+                    vec = index.reconstruct(vid)
+                    new_vid = str(len(kept_vectors))
+                    remaining_meta[new_vid] = entry
+                    kept_vectors.append(vec)
+                except Exception as e:
+                    logger.warning(f"Could not reconstruct vector {vid}: {e}")
+
+        new_index = faiss.IndexFlatIP(dimension)
+        if kept_vectors:
+            new_index.add(np.array(kept_vectors, dtype=np.float32))
+        index = new_index
+        metadata = remaining_meta
+        save_index_atomically(index, metadata, data_dir)
+        with open(processed_path, "w", encoding="utf-8") as f:
+            json.dump(processed_data, f, indent=2)
+        logger.info(f"Purged removed photos. Remaining vectors in index: {index.ntotal}.")
+
     if not to_process and not to_remove:
         logger.info("Index is fully up to date. No new or modified photographs found.")
         return {
@@ -145,4 +175,14 @@ def run_incremental_indexer(data_dir: str = None) -> dict:
     }
 
 if __name__ == "__main__":
+    import sys
+    if "--rebuild" in sys.argv:
+        print("Rebuild requested. Cleaning existing index cache...")
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        data_d = os.path.join(base_dir, "data")
+        for f in ["face_index.faiss", "face_metadata.json", "processed_files.json"]:
+            p = os.path.join(data_d, f)
+            if os.path.exists(p):
+                os.remove(p)
+                print(f"Removed {f}")
     run_incremental_indexer()

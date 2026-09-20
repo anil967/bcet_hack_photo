@@ -19,7 +19,7 @@ build/
 dist/
 
 # FAISS and Data
-# Keep sample photos and schema, ignore generated index binaries if requested
+data/thumbnails/
 *.log
 .DS_Store
 Thumbs.db

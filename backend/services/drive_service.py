@@ -3,6 +3,9 @@ import io
 import logging
 from typing import List, Dict, Optional, Tuple
 from PIL import Image
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logger = logging.getLogger("photofinder.drive")
 
@@ -13,6 +16,8 @@ class DriveService:
     Guarantees no Google Drive URLs or secrets are ever leaked to the frontend.
     """
     def __init__(self):
+        self.service_account_file = os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE", "").strip() or os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "").strip()
+        self.service_account_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
         self.client_id = os.getenv("GOOGLE_CLIENT_ID", "").strip()
         self.client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "").strip()
         self.refresh_token = os.getenv("GOOGLE_REFRESH_TOKEN", "").strip()
@@ -26,10 +31,20 @@ class DriveService:
         os.makedirs(self.sample_dir, exist_ok=True)
         os.makedirs(self.thumbnail_cache_dir, exist_ok=True)
 
+        # Check default service_account.json location in project root
+        default_sa_file = os.path.join(self.root_dir, "service_account.json")
+        if not self.service_account_file and os.path.exists(default_sa_file):
+            self.service_account_file = default_sa_file
+
+        # Check default token.json location in project root (from OAuth desktop flow)
+        self.token_file = os.getenv("GOOGLE_TOKEN_FILE", "").strip() or os.path.join(self.root_dir, "token.json")
+        self.token_json = os.getenv("GOOGLE_TOKEN_JSON", "").strip()
+
         self._drive_client = None
-        self._is_drive_configured = bool(
-            self.client_id and self.client_secret and self.refresh_token and self.folder_id
-        )
+        has_token = bool((self.token_file and os.path.exists(self.token_file)) or self.token_json)
+        has_sa = bool((self.service_account_file and os.path.exists(self.service_account_file)) or self.service_account_json)
+        has_oauth = bool(self.client_id and self.client_secret and self.refresh_token)
+        self._is_drive_configured = bool((has_token or has_sa or has_oauth) and self.folder_id)
 
         if self._is_drive_configured and self.storage_mode != "sample":
             self._init_google_drive()
@@ -38,19 +53,51 @@ class DriveService:
 
     def _init_google_drive(self):
         try:
-            from google.oauth2.credentials import Credentials
             from googleapiclient.discovery import build
 
-            credentials = Credentials(
-                token=None,
-                refresh_token=self.refresh_token,
-                token_uri="https://oauth2.googleapis.com/token",
-                client_id=self.client_id,
-                client_secret=self.client_secret,
-                scopes=["https://www.googleapis.com/auth/drive.readonly"]
-            )
-            self._drive_client = build("drive", "v3", credentials=credentials, cache_discovery=False)
-            logger.info("Google Drive v3 client connected successfully.")
+            scopes = ["https://www.googleapis.com/auth/drive.readonly"]
+            credentials = None
+
+            # 1. Try saved user token (from env var string or token.json file)
+            if self.token_json:
+                import json
+                from google.oauth2.credentials import Credentials
+                info = json.loads(self.token_json)
+                credentials = Credentials.from_authorized_user_info(info, scopes=scopes)
+                logger.info("Loaded Google credentials from GOOGLE_TOKEN_JSON environment variable.")
+            elif self.token_file and os.path.exists(self.token_file):
+                from google.oauth2.credentials import Credentials
+                credentials = Credentials.from_authorized_user_file(self.token_file, scopes=scopes)
+                logger.info(f"Loaded Google credentials from user token file: {self.token_file}")
+            # 2. Try Service Account File or JSON string
+            elif self.service_account_json:
+                from google.oauth2 import service_account
+                import json
+                sa_info = json.loads(self.service_account_json)
+                credentials = service_account.Credentials.from_service_account_info(sa_info, scopes=scopes)
+                logger.info("Loaded Google credentials via Service Account JSON content.")
+            elif self.service_account_file and os.path.exists(self.service_account_file):
+                from google.oauth2 import service_account
+                credentials = service_account.Credentials.from_service_account_file(self.service_account_file, scopes=scopes)
+                logger.info(f"Loaded Google credentials from Service Account file: {self.service_account_file}")
+            # 3. Fall back to OAuth2 refresh token from env
+            elif self.client_id and self.client_secret and self.refresh_token:
+                from google.oauth2.credentials import Credentials
+                credentials = Credentials(
+                    token=None,
+                    refresh_token=self.refresh_token,
+                    token_uri="https://oauth2.googleapis.com/token",
+                    client_id=self.client_id,
+                    client_secret=self.client_secret,
+                    scopes=scopes
+                )
+                logger.info("Loaded Google credentials via OAuth2 refresh token.")
+
+            if credentials:
+                self._drive_client = build("drive", "v3", credentials=credentials, cache_discovery=False)
+                logger.info("Google Drive v3 client connected successfully.")
+            else:
+                logger.warning("No valid Google Drive credentials could be loaded.")
         except Exception as e:
             logger.error(f"Failed to initialize Google Drive client: {e}. Falling back to sample photos.")
             self._drive_client = None
@@ -76,7 +123,9 @@ class DriveService:
                         spaces='drive',
                         fields='nextPageToken, files(id, name, mimeType, modifiedTime, thumbnailLink)',
                         pageToken=page_token,
-                        pageSize=100
+                        pageSize=100,
+                        supportsAllDrives=True,
+                        includeItemsFromAllDrives=True
                     ).execute()
                     files = response.get('files', [])
                     for f in files:
@@ -119,7 +168,7 @@ class DriveService:
         if self.is_drive_mode:
             try:
                 from googleapiclient.http import MediaIoBaseDownload
-                request = self._drive_client.files().get_media(fileId=file_id)
+                request = self._drive_client.files().get_media(fileId=file_id, supportsAllDrives=True)
                 fh = io.BytesIO()
                 downloader = MediaIoBaseDownload(fh, request)
                 done = False
