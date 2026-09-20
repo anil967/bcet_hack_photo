@@ -28,5 +28,11 @@
     "status": "processed",
     "faces_detected": 1,
     "indexed_at": "2026-09-20T06:50:48.466729+00:00"
+  },
+  "1LIivmhOoRZx-PJlIfQ41cmCJnmO45Rsl": {
+    "modified_time": "2026-09-20T06:54:31.000Z",
+    "status": "processed",
+    "faces_detected": 5,
+    "indexed_at": "2026-09-20T06:55:20.160104+00:00"
   }
 }

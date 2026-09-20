@@ -185,5 +185,60 @@
       "w": 253.85226440429688,
       "h": 333.6023864746094
     }
+  },
+  "17": {
+    "file_id": "1LIivmhOoRZx-PJlIfQ41cmCJnmO45Rsl",
+    "file_name": "WhatsApp Image 2026-09-10 at 8.57.21 PM.jpeg",
+    "face_index": 0,
+    "box": {
+      "x": 743.571044921875,
+      "y": 287.22943115234375,
+      "w": 258.45721435546875,
+      "h": 322.34222412109375
+    }
+  },
+  "18": {
+    "file_id": "1LIivmhOoRZx-PJlIfQ41cmCJnmO45Rsl",
+    "file_name": "WhatsApp Image 2026-09-10 at 8.57.21 PM.jpeg",
+    "face_index": 1,
+    "box": {
+      "x": 557.0365600585938,
+      "y": 350.05010986328125,
+      "w": 142.01766967773438,
+      "h": 198.83108520507812
+    }
+  },
+  "19": {
+    "file_id": "1LIivmhOoRZx-PJlIfQ41cmCJnmO45Rsl",
+    "file_name": "WhatsApp Image 2026-09-10 at 8.57.21 PM.jpeg",
+    "face_index": 2,
+    "box": {
+      "x": 418.39923095703125,
+      "y": 334.0302429199219,
+      "w": 104.93441772460938,
+      "h": 133.51246643066406
+    }
+  },
+  "20": {
+    "file_id": "1LIivmhOoRZx-PJlIfQ41cmCJnmO45Rsl",
+    "file_name": "WhatsApp Image 2026-09-10 at 8.57.21 PM.jpeg",
+    "face_index": 3,
+    "box": {
+      "x": 210.60202026367188,
+      "y": 363.82623291015625,
+      "w": 100.56218719482422,
+      "h": 115.35803985595703
+    }
+  },
+  "21": {
+    "file_id": "1LIivmhOoRZx-PJlIfQ41cmCJnmO45Rsl",
+    "file_name": "WhatsApp Image 2026-09-10 at 8.57.21 PM.jpeg",
+    "face_index": 4,
+    "box": {
+      "x": 56.94580841064453,
+      "y": 339.3704528808594,
+      "w": 39.935367584228516,
+      "h": 53.1955680847168
+    }
   }
 }
