@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
-import { ShieldCheck, Compass, Sparkles } from "lucide-react";
+import { Compass, Sparkles, ShieldCheck } from "lucide-react";
 
 import { CameraCapture } from "../components/CameraCapture";
 import { SelfiePreview } from "../components/SelfiePreview";
@@ -44,7 +44,6 @@ export default function Home() {
         if (result.count > 0) {
           setPhotos(result.photos);
           setStage("results");
-          // Golden Odyssey confetti
           try {
             confetti({
               particleCount: 80,
@@ -85,50 +84,29 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0a0705]">
-      {/* Odyssey Header */}
-      <header className="w-full border-b border-[#f39c12]/30 bg-[#0e0905]/90 backdrop-blur-md sticky top-0 z-40 shadow-[0_4px_25px_rgba(0,0,0,0.8)]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Golden Spartan / Voyage Medallion */}
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#f39c12]/30 to-[#0a0705] border border-[#ffd700]/60 flex items-center justify-center text-[#ffd700] shadow-[0_0_12px_rgba(243,156,18,0.35)]">
-              <Compass className="w-5 h-5 animate-pulse-slow text-[#ffd700]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading font-bold text-lg tracking-[0.14em] uppercase bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
-                The Odyssey
-              </span>
-              <span className="font-heading text-[10px] tracking-[0.18em] text-[#f39c12] uppercase font-semibold">
-                PhotoFinder · Journey to Innovation
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#1c130b]/80 border border-[#f39c12]/40 text-xs font-heading tracking-wider text-[#ffd700]">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#ffd700]" />
-            <span className="hidden sm:inline">Secure Biometric Match</span>
-            <span className="sm:hidden">Secure</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Stage */}
-      <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+    <div className="flex flex-col min-h-[100dvh] justify-between bg-[#0a0705] text-[#e0d5c1] px-3 py-3 sm:px-6 sm:py-6 select-none overflow-x-hidden">
+      {/* Main Container */}
+      <main className="flex-1 w-full max-w-4xl mx-auto flex flex-col items-center justify-center">
+        {/* Compact Hero Header (No top bar) */}
         {(stage === "camera" || stage === "preview") && (
-          <div className="text-center max-w-xl mx-auto mb-8 animate-fadeIn">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f39c12]/15 border border-[#f39c12]/30 text-[#ffd700] text-xs font-heading uppercase tracking-[0.18em] mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-[#ffd700]" />
-              <span>BCET ODYSSEY HACKATHON · TECH FOR BHARAT</span>
+          <div className="text-center w-full max-w-md mx-auto mb-3 sm:mb-5 animate-fadeIn">
+            {/* Medallion + Eyebrow */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#140c06] border border-[#f39c12]/35 text-[#ffd700] text-[10px] sm:text-xs font-heading uppercase tracking-[0.18em] mb-2 shadow-[0_0_15px_rgba(243,156,18,0.2)]">
+              <Compass className="w-3.5 h-3.5 text-[#ffd700] animate-pulse-slow" />
+              <span>The Odyssey Hackathon 2K26</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-heading font-extrabold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+
+            {/* Display Title */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
               Find Your Odyssey Moments
             </h1>
-            <p className="text-sm sm:text-base text-[#c9bba8] font-body mt-3 max-w-md mx-auto leading-relaxed">
-              Capture a quick selfie to discover every moment you appear in across the hackathon voyage.
+            <p className="text-xs sm:text-sm text-[#a89680] font-body mt-1 sm:mt-1.5 leading-snug max-w-xs sm:max-w-sm mx-auto">
+              Take a selfie to discover your event photographs instantly.
             </p>
           </div>
         )}
 
+        {/* Stages */}
         {stage === "camera" && (
           <CameraCapture onCapture={handleCapture} onError={handleCameraError} />
         )}
@@ -172,17 +150,15 @@ export default function Home() {
         />
       )}
 
-      {/* Odyssey Footer */}
-      <footer className="w-full border-t border-[#f39c12]/20 bg-[#070503]/80 py-6 text-center text-xs text-[#8f7c66] font-heading">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span className="tracking-wider">THE ODYSSEY HACKATHON 2K26 · BCET</span>
-          <div className="flex items-center gap-4 text-[#a89680] tracking-wider">
-            <span>NO REGISTRATION REQUIRED</span>
-            <span>·</span>
-            <span>SELFIES NEVER STORED</span>
+      {/* Minimal Odyssey Footer */}
+      {(stage === "camera" || stage === "preview") && (
+        <footer className="w-full text-center py-2 text-[11px] text-[#705e4c] font-heading tracking-wider">
+          <div className="flex items-center justify-center gap-2">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#f39c12]" />
+            <span>Biometric data processed in memory only · Selfies never stored</span>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 }

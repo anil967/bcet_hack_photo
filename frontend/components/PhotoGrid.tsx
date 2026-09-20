@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Download, Camera, Check, Loader2 } from "lucide-react";
+import { Download, Camera, Loader2 } from "lucide-react";
 import { PhotoItem, getFullPhotoUrl } from "../lib/api";
 import { PhotoCard } from "./PhotoCard";
 
@@ -41,31 +41,31 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <div className="w-full max-w-6xl mx-auto px-2 sm:px-6 py-4 sm:py-8">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[#f39c12]/30">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 sm:pb-6 border-b border-[#f39c12]/30">
         <div>
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-xl sm:text-3xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
               Your Odyssey Moments
             </h2>
-            <span className="px-3 py-1 text-xs font-heading font-bold tracking-wider uppercase bg-[#f39c12]/15 text-[#ffd700] border border-[#f39c12]/40">
+            <span className="px-2.5 py-0.5 text-[11px] sm:text-xs font-heading font-bold tracking-wider uppercase bg-[#f39c12]/15 text-[#ffd700] border border-[#f39c12]/40">
               {photos.length} Found
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-[#a89680] font-body mt-1">
+          <p className="text-[11px] sm:text-xs text-[#a89680] font-body mt-0.5">
             Photographs captured across The Odyssey Hackathon 2K26.
           </p>
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto mt-2 sm:mt-0">
           <button
             type="button"
             onClick={onReset}
-            className="flex items-center gap-2 px-4 py-2.5 odyssey-secondary-btn font-heading text-xs tracking-wider uppercase"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 odyssey-secondary-btn font-heading text-xs tracking-wider uppercase active:scale-95 transition"
           >
-            <Camera className="w-4 h-4 text-[#ffd700]" />
+            <Camera className="w-3.5 h-3.5 text-[#ffd700]" />
             <span>Search Again</span>
           </button>
 
@@ -73,16 +73,16 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
             type="button"
             onClick={handleDownloadAll}
             disabled={downloadingAll}
-            className="flex items-center gap-2 px-5 py-2.5 gold-action-btn font-heading text-xs tracking-wider uppercase disabled:opacity-60"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 gold-action-btn font-heading text-xs tracking-wider uppercase disabled:opacity-60 active:scale-95 transition"
           >
             {downloadingAll ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-[#0a0705]" />
-                <span>Downloading ({downloadedCount}/{photos.length})...</span>
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0a0705]" />
+                <span>({downloadedCount}/{photos.length})</span>
               </>
             ) : (
               <>
-                <Download className="w-4 h-4 text-[#0a0705]" />
+                <Download className="w-3.5 h-3.5 text-[#0a0705]" />
                 <span>Download All</span>
               </>
             )}
@@ -90,8 +90,8 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
         </div>
       </div>
 
-      {/* Responsive Gallery Grid: 4 cols desktop, 3 cols tablet, 2 cols mobile */}
-      <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+      {/* Mobile-optimized Grid: 2 columns mobile with tight clean gaps */}
+      <div className="mt-5 sm:mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5">
         {photos.map((photo, index) => (
           <PhotoCard
             key={photo.id}
