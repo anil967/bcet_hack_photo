@@ -97,12 +97,19 @@ async def rate_limiting_and_logging_middleware(request: Request, call_next):
 @app.get("/health", tags=["System"])
 async def health_check():
     """
-    Health check endpoint returning service readiness.
+    Health check endpoint returning service readiness and storage mode.
     """
+    from backend.services.drive_service import drive_service
+    from backend.services.search_service import search_service
     return {
         "status": "ok",
         "service": "photofinder-backend",
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "drive_mode": drive_service.is_drive_mode,
+        "has_folder_id": bool(drive_service.folder_id),
+        "has_token_json": bool(drive_service.token_json),
+        "has_token_file": bool(drive_service.token_file and os.path.exists(drive_service.token_file)),
+        "indexed_vectors": search_service.index.ntotal if search_service.index else 0
     }
 
 # Include routes
