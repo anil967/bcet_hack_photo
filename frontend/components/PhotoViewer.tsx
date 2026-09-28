@@ -18,16 +18,41 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
 
   const touchStartXRef = useRef<number | null>(null);
 
+  // Check if image is already cached in browser memory, and preload adjacent photos
+  useEffect(() => {
+    if (!currentPhoto) return;
+
+    const fullUrl = getFullPhotoUrl(currentPhoto.imageUrl);
+    const testImg = new Image();
+    testImg.src = fullUrl;
+
+    if (testImg.complete && testImg.naturalWidth > 0) {
+      setIsLoaded(true);
+    } else {
+      setIsLoaded(false);
+      testImg.onload = () => setIsLoaded(true);
+    }
+
+    // Preload next image for instant transition
+    if (currentIndex + 1 < photos.length) {
+      const nextImg = new Image();
+      nextImg.src = getFullPhotoUrl(photos[currentIndex + 1].imageUrl);
+    }
+    // Preload previous image
+    if (currentIndex > 0) {
+      const prevImg = new Image();
+      prevImg.src = getFullPhotoUrl(photos[currentIndex - 1].imageUrl);
+    }
+  }, [currentIndex, currentPhoto, photos]);
+
   const handleNext = useCallback(() => {
     if (currentIndex < photos.length - 1) {
-      setIsLoaded(false);
       onSelectIndex(currentIndex + 1);
     }
   }, [currentIndex, photos.length, onSelectIndex]);
 
   const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
-      setIsLoaded(false);
       onSelectIndex(currentIndex - 1);
     }
   }, [currentIndex, onSelectIndex]);
@@ -142,19 +167,30 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
           </button>
         )}
 
-        <div className="relative max-w-5xl max-h-[80vh] flex items-center justify-center border border-[#f39c12]/30 shadow-[0_0_50px_rgba(0,0,0,0.9)]">
+        <div className="relative max-w-5xl max-h-[80vh] flex items-center justify-center border border-[#f39c12]/30 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden bg-[#0c0805]">
+          {/* Subtle gold loading bar at the top of the frame while high-res loads */}
           {!isLoaded && (
-            <div className="absolute flex items-center justify-center">
-              <Loader2 className="w-8 h-8 text-[#ffd700] animate-spin" />
-            </div>
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#ffd700] to-transparent animate-pulse z-30" />
           )}
 
+          {/* Instant low-res thumbnail backdrop (renders in 0ms because already in browser memory) */}
           <img
-            key={currentPhoto.id}
+            key={`thumb-${currentPhoto.id}`}
+            src={getFullPhotoUrl(currentPhoto.thumbnailUrl)}
+            alt=""
+            aria-hidden="true"
+            className={`max-w-full max-h-[78vh] object-contain filter blur-[1px] transition-opacity duration-300 select-none ${
+              isLoaded ? "opacity-0 absolute pointer-events-none" : "opacity-90 block"
+            }`}
+          />
+
+          {/* Full-resolution photograph */}
+          <img
+            key={`full-${currentPhoto.id}`}
             src={getFullPhotoUrl(currentPhoto.imageUrl)}
             alt={currentPhoto.fileName}
             onLoad={() => setIsLoaded(true)}
-            className={`max-w-full max-h-[78vh] object-contain transition-opacity duration-300 ${
+            className={`max-w-full max-h-[78vh] object-contain transition-opacity duration-300 relative z-20 select-none ${
               isLoaded ? "opacity-100" : "opacity-0"
             }`}
           />

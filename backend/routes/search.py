@@ -3,7 +3,7 @@ import time
 import logging
 from typing import List, Optional
 from pydantic import BaseModel, Field
-from fastapi import APIRouter, HTTPException, Request, Response, Header, Depends
+from fastapi import APIRouter, HTTPException, Request, Response, Header, Depends, BackgroundTasks
 from fastapi.responses import StreamingResponse
 import io
 
@@ -13,6 +13,14 @@ from backend.services.drive_service import drive_service
 
 logger = logging.getLogger("photofinder.api")
 router = APIRouter(prefix="/api")
+
+def prewarm_photos(photo_ids: List[str]):
+    """Background task to pre-cache matching photos to disk so viewer is instantaneous."""
+    for pid in photo_ids:
+        try:
+            drive_service.get_photo_bytes(pid)
+        except Exception as e:
+            logger.debug(f"Prewarm skipped for {pid}: {e}")
 
 # Pydantic schemas
 class SearchPhotoRequest(BaseModel):
@@ -42,7 +50,7 @@ MAX_SELFIE_SIZE_MB = float(os.getenv("MAX_SELFIE_SIZE_MB", "2.0"))
 ADMIN_SECRET = os.getenv("ADMIN_SECRET", "change-this-in-production-secure-key")
 
 @router.post("/search-photos", response_model=None)
-async def search_photos(payload: SearchPhotoRequest, request: Request):
+async def search_photos(payload: SearchPhotoRequest, request: Request, background_tasks: BackgroundTasks):
     """
     Search event photographs matching a participant's selfie.
     Enforces privacy: selfie is processed strictly in-memory and immediately discarded.
@@ -103,6 +111,10 @@ async def search_photos(payload: SearchPhotoRequest, request: Request):
 
     duration_ms = round((time.time() - start_time) * 1000, 2)
     logger.info(f"Search completed in {duration_ms}ms: found {len(matches)} matching photos.")
+
+    # Prewarm top matching full-res photos into local disk cache in background
+    if matches:
+        background_tasks.add_task(prewarm_photos, [m["id"] for m in matches[:12]])
 
     return {
         "success": True,

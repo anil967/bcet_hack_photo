@@ -25,21 +25,21 @@ def authenticate_google_drive(credentials_path: str = None):
         print("=" * 60)
         sys.exit(1)
 
-    print("\nStarting Google Drive authorization flow...")
-    print("A browser window will open automatically. Sign in with your Google account and grant Read-Only access to Drive.\n")
+    print("\nStarting Google Drive authorization flow...", flush=True)
+    print("A browser window will open automatically. Sign in with your Google account and grant Read-Only access to Drive.\n", flush=True)
 
     try:
         flow = InstalledAppFlow.from_client_secrets_file(credentials_path, SCOPES)
-        creds = flow.run_local_server(port=0)
+        creds = flow.run_local_server(port=0, prompt="consent", access_type="offline")
 
         with open(token_path, "w", encoding="utf-8") as token_file:
             token_file.write(creds.to_json())
 
-        print("\n" + "=" * 60)
-        print("SUCCESS! Google Drive authentication complete!")
-        print(f"Saved token to: {token_path}")
-        print("The backend and worker can now access your Google Drive photos seamlessly.")
-        print("=" * 60)
+        print("\n" + "=" * 60, flush=True)
+        print("SUCCESS! Google Drive authentication complete!", flush=True)
+        print(f"Saved token to: {token_path}", flush=True)
+        print("The backend and worker can now access your Google Drive photos seamlessly.", flush=True)
+        print("=" * 60, flush=True)
     except Exception as e:
         print(f"\nAuthentication failed: {e}")
         sys.exit(1)

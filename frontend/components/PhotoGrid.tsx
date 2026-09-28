@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Download, Camera, Loader2 } from "lucide-react";
 import { PhotoItem, getFullPhotoUrl } from "../lib/api";
 import { PhotoCard } from "./PhotoCard";
@@ -14,6 +14,16 @@ interface PhotoGridProps {
 export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [downloadedCount, setDownloadedCount] = useState(0);
+
+  // Pre-cache full-resolution images for the top photos in the background
+  useEffect(() => {
+    if (photos && photos.length > 0) {
+      photos.slice(0, 8).forEach((p) => {
+        const img = new Image();
+        img.src = getFullPhotoUrl(p.imageUrl);
+      });
+    }
+  }, [photos]);
 
   const downloadSinglePhoto = (photo: PhotoItem) => {
     const downloadUrl = getFullPhotoUrl(photo.downloadUrl);

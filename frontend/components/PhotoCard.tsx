@@ -24,11 +24,18 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
     setTimeout(() => setDownloaded(false), 2000);
   };
 
+  const handleMouseEnter = () => {
+    // Speculatively preload the full-resolution photo on hover so clicking opens instantly
+    const img = new Image();
+    img.src = getFullPhotoUrl(photo.imageUrl);
+  };
+
   return (
     <div
       role="button"
       tabIndex={0}
       onClick={() => onView(photo, index)}
+      onMouseEnter={handleMouseEnter}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();

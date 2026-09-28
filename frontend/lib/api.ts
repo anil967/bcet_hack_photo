@@ -22,12 +22,20 @@ export interface SearchErrorResponse {
 
 export type SearchResponse = SearchSuccessResponse | SearchErrorResponse;
 
-const rawUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const rawUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 const API_BASE_URL = rawUrl.replace(/\/+$/, "");
 
+function getEffectiveApiUrl(): string {
+  if (typeof window !== "undefined" && window.location.hostname && window.location.hostname !== "localhost") {
+    return `http://${window.location.hostname}:8000`;
+  }
+  return API_BASE_URL;
+}
+
 export async function searchPhotosWithSelfie(base64Image: string): Promise<SearchResponse> {
+  const baseUrl = getEffectiveApiUrl();
   try {
-    const response = await fetch(`${API_BASE_URL}/api/search-photos`, {
+    const response = await fetch(`${baseUrl}/api/search-photos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,5 +66,6 @@ export function getFullPhotoUrl(path: string): string {
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
-  return `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+  const baseUrl = getEffectiveApiUrl();
+  return `${baseUrl}${path.startsWith("/") ? "" : "/"}${path}`;
 }
