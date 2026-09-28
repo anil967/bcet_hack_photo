@@ -1,6 +1,7 @@
 import os
 import io
 import logging
+import threading
 from typing import List, Dict, Optional, Tuple
 from PIL import Image
 from dotenv import load_dotenv
@@ -16,6 +17,7 @@ class DriveService:
     Guarantees no Google Drive URLs or secrets are ever leaked to the frontend.
     """
     def __init__(self):
+        self._lock = threading.Lock()
         self.service_account_file = os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE", "").strip() or os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "").strip()
         self.service_account_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
         self.client_id = os.getenv("GOOGLE_CLIENT_ID", "").strip()
@@ -82,6 +84,13 @@ class DriveService:
                 from google.oauth2.credentials import Credentials
                 info = json.loads(self.token_json)
                 credentials = Credentials.from_authorized_user_info(info, scopes=scopes)
+                if credentials.expired and credentials.refresh_token:
+                    try:
+                        from google.auth.transport.requests import Request
+                        credentials.refresh(Request())
+                        logger.info("Successfully refreshed Google OAuth token from GOOGLE_TOKEN_JSON.")
+                    except Exception as ref_err:
+                        logger.warning(f"Failed to refresh GOOGLE_TOKEN_JSON credentials: {ref_err}")
                 logger.info("Loaded Google credentials from GOOGLE_TOKEN_JSON environment variable.")
             elif self.token_file and os.path.exists(self.token_file):
                 from google.oauth2.credentials import Credentials
@@ -146,44 +155,45 @@ class DriveService:
         Returns a list of dicts:
         [{ 'id': '...', 'name': '...', 'mimeType': 'image/jpeg', 'modifiedTime': '...' }]
         """
-        self._check_and_reload_token_if_needed()
-        if self.is_drive_mode:
-            try:
-                query = f"'{self.folder_id}' in parents and mimeType contains 'image/' and trashed = false"
-                results = []
-                page_token = None
-                while True:
-                    response = self._drive_client.files().list(
-                        q=query,
-                        spaces='drive',
-                        fields='nextPageToken, files(id, name, mimeType, modifiedTime, thumbnailLink)',
-                        pageToken=page_token,
-                        pageSize=100,
-                        supportsAllDrives=True,
-                        includeItemsFromAllDrives=True
-                    ).execute()
-                    files = response.get('files', [])
-                    for f in files:
-                        results.append({
-                            "id": f.get("id"),
-                            "name": f.get("name"),
-                            "mimeType": f.get("mimeType", "image/jpeg"),
-                            "modifiedTime": f.get("modifiedTime", "")
-                        })
-                    page_token = response.get('nextPageToken', None)
-                    if not page_token:
-                        break
-                return results
-            except Exception as e:
-                err_str = str(e)
-                if "invalid_grant" in err_str or "expired or revoked" in err_str:
-                    logger.error(
-                        "Google Drive OAuth token has expired or been revoked! "
-                        "Please run 'python -m worker.auth_drive' from bcet_hack_photo to re-authenticate."
-                    )
-                else:
-                    logger.error(f"Error querying Google Drive: {e}")
-                # Fall through to local fallback
+        with self._lock:
+            self._check_and_reload_token_if_needed()
+            if self.is_drive_mode:
+                try:
+                    query = f"'{self.folder_id}' in parents and mimeType contains 'image/' and trashed = false"
+                    results = []
+                    page_token = None
+                    while True:
+                        response = self._drive_client.files().list(
+                            q=query,
+                            spaces='drive',
+                            fields='nextPageToken, files(id, name, mimeType, modifiedTime, thumbnailLink)',
+                            pageToken=page_token,
+                            pageSize=100,
+                            supportsAllDrives=True,
+                            includeItemsFromAllDrives=True
+                        ).execute()
+                        files = response.get('files', [])
+                        for f in files:
+                            results.append({
+                                "id": f.get("id"),
+                                "name": f.get("name"),
+                                "mimeType": f.get("mimeType", "image/jpeg"),
+                                "modifiedTime": f.get("modifiedTime", "")
+                            })
+                        page_token = response.get('nextPageToken', None)
+                        if not page_token:
+                            break
+                    return results
+                except Exception as e:
+                    err_str = str(e)
+                    if "invalid_grant" in err_str or "expired or revoked" in err_str:
+                        logger.error(
+                            "Google Drive OAuth token has expired or been revoked! "
+                            "Please run 'python -m worker.auth_drive' from bcet_hack_photo to re-authenticate."
+                        )
+                    else:
+                        logger.error(f"Error querying Google Drive: {e}")
+                    # Fall through to local fallback
 
         # Local sample directory fallback
         photos = []
@@ -225,38 +235,47 @@ class DriveService:
             mime = "image/jpeg" if ext in {".jpg", ".jpeg"} else f"image/{ext[1:]}"
             return content, mime
 
-        # 3. Fetch from Google Drive if in drive mode
-        self._check_and_reload_token_if_needed()
-        if self.is_drive_mode:
-            try:
-                from googleapiclient.http import MediaIoBaseDownload
-                request = self._drive_client.files().get_media(fileId=file_id, supportsAllDrives=True)
-                fh = io.BytesIO()
-                # 10MB chunk size ensures photos download in a single HTTP request instead of 50 small roundtrips
-                downloader = MediaIoBaseDownload(fh, request, chunksize=10 * 1024 * 1024)
-                done = False
-                while not done:
-                    status, done = downloader.next_chunk()
-                fh.seek(0)
-                photo_bytes = fh.read()
-
-                # Save to disk cache for instant subsequent reads
+        # 3. Thread-safe fetch from Google Drive (prevents SSL socket corruption / double-free in Linux glibc)
+        with self._lock:
+            # Re-check cache in case another thread downloaded it while waiting for the lock
+            if os.path.exists(cache_path):
                 try:
-                    with open(cache_path, "wb") as f:
-                        f.write(photo_bytes)
-                except Exception as save_err:
-                    logger.warning(f"Failed to cache full photo {file_id}: {save_err}")
+                    with open(cache_path, "rb") as f:
+                        return f.read(), "image/jpeg"
+                except Exception:
+                    pass
 
-                return photo_bytes, "image/jpeg"
-            except Exception as e:
-                err_str = str(e)
-                if "invalid_grant" in err_str or "expired or revoked" in err_str:
-                    logger.error(
-                        f"Google Drive access failed for photo {file_id}: OAuth token is expired or revoked. "
-                        "Please run 'python -m worker.auth_drive' to log in and re-authorize."
-                    )
-                else:
-                    logger.warning(f"Failed to fetch photo {file_id} from Google Drive: {e}")
+            self._check_and_reload_token_if_needed()
+            if self.is_drive_mode:
+                try:
+                    from googleapiclient.http import MediaIoBaseDownload
+                    request = self._drive_client.files().get_media(fileId=file_id, supportsAllDrives=True)
+                    fh = io.BytesIO()
+                    # 10MB chunk size ensures photos download in a single HTTP request instead of 50 small roundtrips
+                    downloader = MediaIoBaseDownload(fh, request, chunksize=10 * 1024 * 1024)
+                    done = False
+                    while not done:
+                        status, done = downloader.next_chunk()
+                    fh.seek(0)
+                    photo_bytes = fh.read()
+
+                    # Save to disk cache for instant subsequent reads
+                    try:
+                        with open(cache_path, "wb") as f:
+                            f.write(photo_bytes)
+                    except Exception as save_err:
+                        logger.warning(f"Failed to cache full photo {file_id}: {save_err}")
+
+                    return photo_bytes, "image/jpeg"
+                except Exception as e:
+                    err_str = str(e)
+                    if "invalid_grant" in err_str or "expired or revoked" in err_str:
+                        logger.error(
+                            f"Google Drive access failed for photo {file_id}: OAuth token is expired or revoked. "
+                            "Please update GOOGLE_TOKEN_JSON on Render with the contents of your local token.json."
+                        )
+                    else:
+                        logger.warning(f"Failed to fetch photo {file_id} from Google Drive: {e}")
 
         raise FileNotFoundError(f"Photo with ID {file_id} not found in storage.")
 

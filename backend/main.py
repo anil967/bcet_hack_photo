@@ -93,8 +93,21 @@ async def rate_limiting_and_logging_middleware(request: Request, call_next):
             }
         )
 
+# Root endpoint (handles Render / health checks)
+@app.get("/", tags=["System"])
+@app.head("/", tags=["System"])
+async def root():
+    return {
+        "status": "online",
+        "service": "photofinder-backend",
+        "version": "1.0.0",
+        "health": "/health",
+        "docs": "/docs"
+    }
+
 # Health endpoint
 @app.get("/health", tags=["System"])
+@app.head("/health", tags=["System"])
 async def health_check():
     """
     Health check endpoint returning service readiness and storage mode.
