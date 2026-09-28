@@ -22,14 +22,31 @@ export interface SearchErrorResponse {
 
 export type SearchResponse = SearchSuccessResponse | SearchErrorResponse;
 
-const rawUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const DEFAULT_PROD_API_URL = "https://photofinder-backend-pw5f.onrender.com";
+const rawUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const API_BASE_URL = rawUrl.replace(/\/+$/, "");
 
 function getEffectiveApiUrl(): string {
-  if (typeof window !== "undefined" && window.location.hostname && window.location.hostname !== "localhost") {
-    return `http://${window.location.hostname}:8000`;
+  // If explicitly provided via environment variable, use it
+  if (API_BASE_URL) {
+    return API_BASE_URL;
   }
-  return API_BASE_URL;
+
+  // Client-side environment detection
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    // Local development on machine
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "http://127.0.0.1:8000";
+    }
+    // Local testing from mobile on Wi-Fi (192.168.x.x or .local)
+    if (host.startsWith("192.168.") || host.startsWith("10.") || host.endsWith(".local")) {
+      return `http://${host}:8000`;
+    }
+  }
+
+  // Production fallback (Vercel, etc.)
+  return DEFAULT_PROD_API_URL;
 }
 
 export async function searchPhotosWithSelfie(base64Image: string): Promise<SearchResponse> {
