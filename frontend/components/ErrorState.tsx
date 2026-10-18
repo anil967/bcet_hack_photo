@@ -80,15 +80,6 @@ export function ErrorState({ errorCode, errorMessage, onRetry }: ErrorStateProps
               <p className="text-[11px] text-neutral-400 truncate">System Notice</p>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={onRetry}
-            className="flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 transition active:scale-95 text-xs font-medium shadow-sm flex-shrink-0"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-neutral-400" />
-            <span>Try Again</span>
-          </button>
         </div>
       </header>
 
