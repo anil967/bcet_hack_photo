@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
-import { Compass, Sparkles, ShieldCheck } from "lucide-react";
+import { Compass, Sparkles, ShieldCheck, HelpCircle } from "lucide-react";
 
 import { CameraCapture } from "../components/CameraCapture";
 import { SelfiePreview } from "../components/SelfiePreview";
@@ -117,9 +117,14 @@ export default function Home() {
             <p className="text-xs sm:text-sm text-neutral-400 mt-1 leading-normal max-w-xs mx-auto">
               Take a quick selfie to discover all your photographs instantly.
             </p>
-            <p className="text-[10px] sm:text-[11px] text-neutral-500 mt-1 max-w-xs sm:max-w-sm mx-auto leading-tight">
-              <span className="text-amber-400/90 font-medium">Note:</span> This model is not guaranteed to retrieve all your moments. If you miss any of your photos, please contact with us.
-            </p>
+            {/* Structured Disclaimer Callout Box */}
+            <div className="mt-2 sm:mt-2.5 mx-auto w-full max-w-sm p-2 sm:p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800/90 flex items-start gap-2.5 text-left shadow-sm">
+              <HelpCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+              <p className="leading-snug text-[11px] sm:text-xs text-neutral-400">
+                <strong className="text-neutral-200 font-semibold">Missed a moment?</strong>{" "}
+                This model is not guaranteed to retrieve all your moments. If you miss any of your photos, please contact with us.
+              </p>
+            </div>
           </div>
         )}
 
