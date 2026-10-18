@@ -123,7 +123,7 @@ export function ErrorState({ errorCode, errorMessage, onRetry }: ErrorStateProps
       <footer className="w-full text-center py-4 border-t border-neutral-800/60 text-[11px] text-neutral-400 flex-shrink-0">
         <div className="flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Biometric data processed in memory only • Selfies never stored</span>
+          <span>Private & secure • Your selfie is never saved</span>
         </div>
       </footer>
     </div>

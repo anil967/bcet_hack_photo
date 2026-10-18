@@ -5,10 +5,10 @@ import { ScanFace, Check, Loader2, ShieldCheck, Compass } from "lucide-react";
 
 export function SearchProgress() {
   const steps = [
-    { title: "Analyzing selfie", desc: "Aligning facial landmarks" },
-    { title: "Extracting biometric vector", desc: "Generating ArcFace cosine signature" },
-    { title: "Querying FAISS database", desc: "Comparing with 11,500+ event vectors" },
-    { title: "Curating your gallery", desc: "Filtering high-confidence matches" },
+    { title: "Analyzing selfie", desc: "Looking at your photo" },
+    { title: "Searching event photos", desc: "Finding matching moments" },
+    { title: "Selecting your photos", desc: "Picking out your best shots" },
+    { title: "Preparing your gallery", desc: "Organizing your moments" },
   ];
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -67,8 +67,8 @@ export function SearchProgress() {
         </h3>
         <p className="text-xs text-neutral-400 mt-1 max-w-xs leading-relaxed">
           {elapsed > 5
-            ? "Connecting to secure search engine (first search initializes server)..."
-            : "Comparing your biometric signature across all 2,042 event photographs."}
+            ? "Almost there, preparing your gallery..."
+            : "Finding all your moments from the event..."}
         </p>
 
         {/* Structured Progress Card */}
@@ -133,7 +133,7 @@ export function SearchProgress() {
       {/* Privacy Guarantee Footer */}
       <div className="flex items-center justify-center gap-1.5 text-[11px] text-neutral-400 py-2">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-        <span>In-memory biometric match • Zero storage</span>
+        <span>Private & secure • Your selfie is never saved</span>
       </div>
     </div>
   );
