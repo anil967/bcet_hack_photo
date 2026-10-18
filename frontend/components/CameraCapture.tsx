@@ -88,6 +88,37 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
     };
   }, [facingMode]);
 
+  // Helper to downscale large uploaded photos to max 800px for instant upload
+  const resizeImageToMax = (dataUrl: string, maxDim = 800, quality = 0.82): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        } else {
+          resolve(dataUrl);
+        }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  };
+
   const handleCapture = () => {
     if (!videoRef.current || !isReady) return;
 
@@ -95,8 +126,20 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
     const canvas = canvasRef.current || document.createElement("canvas");
     canvasRef.current = canvas;
 
-    const width = video.videoWidth || 640;
-    const height = video.videoHeight || 480;
+    let width = video.videoWidth || 640;
+    let height = video.videoHeight || 480;
+
+    // Downscale if camera stream is ultra-high res (4K/1080p) to keep upload under 80KB
+    const maxDim = 800;
+    if (width > maxDim || height > maxDim) {
+      if (width > height) {
+        height = Math.round((height * maxDim) / width);
+        width = maxDim;
+      } else {
+        width = Math.round((width * maxDim) / height);
+        height = maxDim;
+      }
+    }
 
     canvas.width = width;
     canvas.height = height;
@@ -109,7 +152,7 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
     }
 
     ctx.drawImage(video, 0, 0, width, height);
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.88);
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
 
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -131,18 +174,20 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      onError("IMAGE_TOO_LARGE", "Image file exceeds maximum 10MB limit.");
+    if (file.size > 15 * 1024 * 1024) {
+      onError("IMAGE_TOO_LARGE", "Image file exceeds maximum 15MB limit.");
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       if (typeof reader.result === "string") {
         if (stream) {
           stream.getTracks().forEach((track) => track.stop());
         }
-        onCapture(reader.result);
+        // Downscale uploaded image client-side to ~60KB for instant network transmission
+        const optimized = await resizeImageToMax(reader.result, 800, 0.82);
+        onCapture(optimized);
       }
     };
     reader.readAsDataURL(file);

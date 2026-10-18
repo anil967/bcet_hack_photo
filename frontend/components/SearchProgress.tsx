@@ -12,12 +12,19 @@ export function SearchProgress() {
   ];
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const stepTimer = setInterval(() => {
       setCurrentStepIndex((prev) => (prev < steps.length - 1 ? prev + 1 : prev));
     }, 850);
-    return () => clearInterval(interval);
+    const elapsedTimer = setInterval(() => {
+      setElapsed((prev) => prev + 1);
+    }, 1000);
+    return () => {
+      clearInterval(stepTimer);
+      clearInterval(elapsedTimer);
+    };
   }, [steps.length]);
 
   return (
@@ -59,7 +66,9 @@ export function SearchProgress() {
           Searching Event Photos
         </h3>
         <p className="text-xs text-neutral-400 mt-1 max-w-xs leading-relaxed">
-          Comparing your biometric signature across all 2,042 event photographs.
+          {elapsed > 5
+            ? "Connecting to secure search engine (first search initializes server)..."
+            : "Comparing your biometric signature across all 2,042 event photographs."}
         </p>
 
         {/* Structured Progress Card */}
