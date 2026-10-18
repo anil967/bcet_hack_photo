@@ -53,6 +53,11 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
 
       {/* Main Photograph */}
       <img
+        ref={(el) => {
+          if (el && el.complete && el.naturalWidth > 0 && !isLoaded) {
+            setIsLoaded(true);
+          }
+        }}
         src={thumbUrl}
         alt={photo.fileName}
         loading="lazy"

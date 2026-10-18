@@ -288,23 +288,29 @@ class DriveService:
             with open(cache_path, "rb") as f:
                 return f.read(), "image/jpeg"
 
-        # 1. High-Speed Fast Path: Fetch pre-computed thumbnail directly from Google Drive CDN (~100-300KB instead of 20MB)
+        # 1. High-Speed Fast Path: Fetch authorized Google Drive CDN thumbnail with signed link (~68KB)
         if self.is_drive_mode:
             try:
-                import urllib.request
-                thumb_url = f"https://drive.google.com/thumbnail?id={file_id}&sz=w600"
-                req = urllib.request.Request(thumb_url, headers={"User-Agent": "Mozilla/5.0"})
-                with urllib.request.urlopen(req, timeout=5) as response:
-                    thumb_data = response.read()
-                    if thumb_data and len(thumb_data) > 1024:
-                        try:
-                            with open(cache_path, "wb") as f:
-                                f.write(thumb_data)
-                        except Exception:
-                            pass
-                        return thumb_data, "image/jpeg"
+                self._check_and_reload_token_if_needed()
+                meta = self._drive_client.files().get(fileId=file_id, fields="thumbnailLink", supportsAllDrives=True).execute()
+                thumb_link = meta.get("thumbnailLink")
+                if thumb_link:
+                    # Request crisp 500px thumbnail with signed Drive CDN token
+                    signed_url = thumb_link.replace("=s220", "=s500")
+                    import urllib.request
+                    req = urllib.request.Request(signed_url, headers={"User-Agent": "Mozilla/5.0"})
+                    with urllib.request.urlopen(req, timeout=6) as response:
+                        thumb_data = response.read()
+                        # Strictly verify JPEG magic bytes (0xFF, 0xD8) to guarantee valid image
+                        if thumb_data and len(thumb_data) > 1000 and thumb_data[:2] == b'\xff\xd8':
+                            try:
+                                with open(cache_path, "wb") as f:
+                                    f.write(thumb_data)
+                            except Exception:
+                                pass
+                            return thumb_data, "image/jpeg"
             except Exception as e:
-                logger.debug(f"Direct Google thumbnail fetch skipped for {file_id}: {e}. Falling back to full render.")
+                logger.debug(f"Direct signed Drive thumbnail fetch skipped for {file_id}: {e}. Falling back to full render.")
 
         # 2. Local/Offline Fallback: Generate thumbnail from source photo
         photo_bytes, _ = self.get_photo_bytes(file_id)
