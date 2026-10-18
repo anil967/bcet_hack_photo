@@ -58,12 +58,12 @@ class SearchService:
     def is_ready(self) -> bool:
         return self.index is not None and self.index.ntotal > 0
 
-    def search(self, query_vector: np.ndarray, top_k: int = 100) -> List[Dict[str, Any]]:
+    def search(self, query_vector: np.ndarray, top_k: Optional[int] = None) -> List[Dict[str, Any]]:
         """
         Executes similarity search:
         1. Automatically reloads if index on disk has been updated.
-        2. Queries FAISS Inner Product for top_k vectors.
-        3. Filters matches by match_threshold.
+        2. Queries FAISS Inner Product across all indexed vectors (or top_k if specified).
+        3. Filters matches by match_threshold (enforcing >= 50% match).
         4. Deduplicates matching photos by file_id.
         5. Returns photo items with URLs for display and download.
         """
@@ -100,8 +100,9 @@ class SearchService:
         # Strictly enforce >= 50% match (0.50)
         threshold = max(0.50, threshold)
 
-        # Inner product search
-        scores, indices = self.index.search(vec, min(top_k, self.index.ntotal))
+        # Inner product search across all vectors without artificial caps
+        k = top_k if top_k is not None else self.index.ntotal
+        scores, indices = self.index.search(vec, min(k, self.index.ntotal))
 
         matched_photos_map = {} # file_id -> photo dict
         top_score = float(scores[0][0]) if len(scores[0]) > 0 and indices[0][0] >= 0 else 0.0

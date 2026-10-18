@@ -103,9 +103,9 @@ async def search_photos(payload: SearchPhotoRequest, request: Request, backgroun
             "message": "Failed to analyze selfie. Please try again."
         }
 
-    # Step 2: Query FAISS Vector Index
+    # Step 2: Query FAISS Vector Index (unlimited - all photos meeting confidence threshold)
     try:
-        matches = search_service.search(embedding, top_k=100)
+        matches = search_service.search(embedding)
     except Exception as e:
         logger.error(f"Search vector index failure: {e}")
         return {
