@@ -202,14 +202,14 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
             type="button"
             onClick={handleNext}
             aria-label="Next photograph"
-            className="absolute right-4 sm:right-8 p-3.5 odyssey-secondary-btn text-[#ffd700] z-10 shadow-2xl hover:scale-110 transition"
+            className="absolute right-4 sm:right-8 p-3 rounded-full bg-neutral-900/80 hover:bg-neutral-800 text-white border border-neutral-700 z-10 shadow-xl transition active:scale-95"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
         )}
       </div>
 
-      <div className="p-4 text-center text-xs text-[#8f7c66] font-heading tracking-wider z-10 border-t border-[#f39c12]/20 bg-[#0a0705]/80">
+      <div className="p-4 text-center text-xs text-neutral-400 font-medium tracking-wide z-10 border-t border-neutral-800 bg-neutral-950/80">
         <span>{currentPhoto.fileName}</span>
         <span className="hidden sm:inline mx-2">·</span>
         <span className="hidden sm:inline">Use arrow keys or swipe to navigate</span>
