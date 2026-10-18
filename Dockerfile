@@ -22,11 +22,11 @@ COPY data/ ./data/
 # Download YuNet and SFace models during build so container boots instantly
 RUN python -c "from backend.services.face_service import face_service; print('Models verified!')"
 
-# Default port (Render overrides with $PORT)
-ENV PORT=8000
+# Default port for Render (Render passes $PORT, default 10000)
+ENV PORT=10000
 ENV PYTHONUNBUFFERED=1
 
-EXPOSE 8000
+EXPOSE 10000
 
-# Start production uvicorn server
-CMD exec uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}
+# Start production uvicorn server with explicit PORT binding
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
