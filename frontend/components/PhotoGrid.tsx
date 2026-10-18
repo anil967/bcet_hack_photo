@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Download, Camera, Loader2 } from "lucide-react";
-import { PhotoItem, getFullPhotoUrl } from "../lib/api";
+import { PhotoItem, getFullPhotoUrl, getEffectiveApiUrl } from "../lib/api";
 import { PhotoCard } from "./PhotoCard";
 
 interface PhotoGridProps {
@@ -13,34 +13,71 @@ interface PhotoGridProps {
 
 export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   const [downloadingAll, setDownloadingAll] = useState(false);
-  const [downloadedCount, setDownloadedCount] = useState(0);
+  const [downloadStatus, setDownloadStatus] = useState<string>("");
 
   // Strictly show only photos matching 50% or greater (>= 0.50)
   const qualifiedPhotos = photos.filter((p) => (p.matchScore ?? 1.0) >= 0.50);
 
-  const downloadSinglePhoto = (photo: PhotoItem) => {
-    const downloadUrl = getFullPhotoUrl(photo.downloadUrl);
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = photo.fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const downloadSinglePhoto = async (photo: PhotoItem) => {
+    try {
+      const downloadUrl = getFullPhotoUrl(photo.downloadUrl);
+      const res = await fetch(downloadUrl);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = photo.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+    } catch {
+      window.open(getFullPhotoUrl(photo.downloadUrl), "_blank");
+    }
   };
 
   const handleDownloadAll = async () => {
     if (downloadingAll || qualifiedPhotos.length === 0) return;
 
     setDownloadingAll(true);
-    setDownloadedCount(0);
+    setDownloadStatus("Preparing ZIP...");
 
-    for (let i = 0; i < qualifiedPhotos.length; i++) {
-      downloadSinglePhoto(qualifiedPhotos[i]);
-      setDownloadedCount(i + 1);
-      await new Promise((resolve) => setTimeout(resolve, 350));
+    try {
+      const baseUrl = getEffectiveApiUrl();
+      const photoIds = qualifiedPhotos.map((p) => p.id);
+
+      const response = await fetch(`${baseUrl}/api/photos/download-zip`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ photo_ids: photoIds }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate zip");
+      }
+
+      setDownloadStatus("Downloading ZIP...");
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = "Your_Odyssey_Moments.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+    } catch (err) {
+      console.error("ZIP download failed, falling back to sequential download:", err);
+      // Sequential fallback if zip endpoint ever fails
+      for (let i = 0; i < qualifiedPhotos.length; i++) {
+        setDownloadStatus(`(${i + 1}/${qualifiedPhotos.length})`);
+        await downloadSinglePhoto(qualifiedPhotos[i]);
+        await new Promise((resolve) => setTimeout(resolve, 600));
+      }
+    } finally {
+      setDownloadingAll(false);
+      setDownloadStatus("");
     }
-
-    setDownloadingAll(false);
   };
 
 
@@ -92,12 +129,12 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
               {downloadingAll ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin text-neutral-900" />
-                  <span>({downloadedCount}/{qualifiedPhotos.length})</span>
+                  <span>{downloadStatus || "Preparing..."}</span>
                 </>
               ) : (
                 <>
                   <Download className="w-3.5 h-3.5 text-neutral-900" />
-                  <span className="whitespace-nowrap">Download All</span>
+                  <span className="whitespace-nowrap">Download All ({qualifiedPhotos.length})</span>
                 </>
               )}
             </button>

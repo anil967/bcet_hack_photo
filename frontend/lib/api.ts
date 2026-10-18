@@ -35,7 +35,7 @@ const DEFAULT_PROD_API_URL = "https://bcethackphoto-production.up.railway.app";
 const rawUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const API_BASE_URL = normalizeUrl(rawUrl);
 
-function getEffectiveApiUrl(): string {
+export function getEffectiveApiUrl(): string {
   // If explicitly provided via environment variable, use it
   if (API_BASE_URL) {
     return API_BASE_URL;

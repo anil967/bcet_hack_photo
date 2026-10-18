@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Request, Response, Header, Depends, BackgroundTasks
 from fastapi.responses import StreamingResponse
 import io
+import zipfile
 
 from backend.services.face_service import face_service
 from backend.services.search_service import search_service
@@ -207,6 +208,53 @@ def download_photo(file_id: str):
     except Exception as e:
         logger.error(f"Error downloading photo {file_id}: {e}")
         raise HTTPException(status_code=500, detail="Error downloading photograph")
+
+class DownloadZipRequest(BaseModel):
+    photo_ids: List[str]
+
+@router.post("/photos/download-zip")
+def download_photos_zip(payload: DownloadZipRequest):
+    """
+    Packages matching event photos into a single clean ZIP archive.
+    Enables reliable 1-click 'Download All' on mobile and desktop without browser popup blocks.
+    """
+    if not payload.photo_ids:
+        raise HTTPException(status_code=400, detail="No photos specified for download")
+
+    # Safety limit: max 150 photos per zip
+    target_ids = payload.photo_ids[:150]
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, mode="w", compression=zipfile.ZIP_STORED) as zf:
+        added_names = set()
+        for idx, pid in enumerate(target_ids):
+            try:
+                photo_bytes, mime_type = drive_service.get_photo_bytes(pid)
+                # Find clean original human-readable filename from metadata
+                fname = f"Odyssey_Photo_{idx+1}.jpg"
+                for meta in search_service.metadata.values():
+                    if meta.get("file_id") == pid:
+                        fname = meta.get("file_name", fname)
+                        break
+
+                # Prevent duplicate filename collisions in zip
+                if fname in added_names:
+                    fname = f"{idx+1}_{fname}"
+                added_names.add(fname)
+
+                zf.writestr(fname, photo_bytes)
+            except Exception as e:
+                logger.warning(f"Skipping photo {pid} in zip archive: {e}")
+
+    zip_buffer.seek(0)
+    return Response(
+        content=zip_buffer.getvalue(),
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": 'attachment; filename="Your_Odyssey_Moments.zip"',
+            "Cache-Control": "private, no-cache"
+        }
+    )
 
 @router.post("/admin/reindex")
 async def trigger_admin_reindex(x_admin_secret: Optional[str] = Header(None)):
