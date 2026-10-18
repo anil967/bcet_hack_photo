@@ -83,7 +83,7 @@ export async function searchPhotosWithSelfie(base64Image: string): Promise<Searc
     return {
       success: false,
       error: "NETWORK_ERROR",
-      message: "Unable to connect to PhotoFinder server. Please check your internet connection.",
+      message: "Please wait a moment while we prepare your photos, then try again.",
     };
   }
 }

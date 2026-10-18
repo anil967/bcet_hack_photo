@@ -42,16 +42,16 @@ export function ErrorState({ errorCode, errorMessage, onRetry }: ErrorStateProps
         };
       case "NETWORK_ERROR":
         return {
-          icon: WifiOff,
-          title: "Connection Lost",
-          message: "Unable to reach the PhotoFinder server. Please check your connection and retry.",
+          icon: Clock,
+          title: "Please Wait a Moment",
+          message: "The server is preparing your photos. Please wait a moment and tap below to try again.",
           buttonText: "Try Again",
         };
       default:
         return {
-          icon: AlertTriangle,
-          title: "Search Error",
-          message: errorMessage || "An unexpected issue occurred during your search. Please try again.",
+          icon: Clock,
+          title: "Please Wait a Moment",
+          message: "Please wait a moment and tap below to try again.",
           buttonText: "Try Again",
         };
     }

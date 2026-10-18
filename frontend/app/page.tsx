@@ -65,7 +65,7 @@ export default function Home() {
       }
     } catch {
       setErrorCode("NETWORK_ERROR");
-      setErrorMessage("Unable to connect to PhotoFinder server. Please try again.");
+      setErrorMessage("Please wait a moment while we prepare your photos, then try again.");
       setStage("error");
     }
   };

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Maximize2, Download, Check } from "lucide-react";
+import { Maximize2, Download, Check, Loader2 } from "lucide-react";
 import { PhotoItem, getFullPhotoUrl } from "../lib/api";
 
 interface PhotoCardProps {
@@ -46,9 +46,12 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
       aria-label={`View photo ${photo.fileName}`}
       className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800 hover:border-neutral-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
     >
-      {/* Loading Skeleton */}
+      {/* Loading Indicator */}
       {!isLoaded && (
-        <div className="absolute inset-0 bg-neutral-800/80 animate-pulse" />
+        <div className="absolute inset-0 bg-neutral-900/90 flex flex-col items-center justify-center p-2 text-center pointer-events-none">
+          <Loader2 className="w-5 h-5 text-amber-400/80 animate-spin mb-1.5" />
+          <span className="text-[10px] text-neutral-400 font-medium">Please wait...</span>
+        </div>
       )}
 
       {/* Main Photograph */}

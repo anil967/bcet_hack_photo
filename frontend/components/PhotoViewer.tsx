@@ -14,13 +14,29 @@ interface PhotoViewerProps {
 export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: PhotoViewerProps) {
   const currentPhoto = photos[currentIndex];
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [loadSeconds, setLoadSeconds] = useState(0);
+  const [retryKey, setRetryKey] = useState(0);
   const [downloaded, setDownloaded] = useState(false);
 
   const touchStartXRef = useRef<number | null>(null);
 
+  // Timer to track how long loading takes and show helpful friendly text
+  useEffect(() => {
+    if (isLoaded || hasError) return;
+    const timer = setInterval(() => {
+      setLoadSeconds((s) => s + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [isLoaded, hasError, currentIndex, retryKey]);
+
   // Check if image is already cached in browser memory, and preload adjacent photos
   useEffect(() => {
     if (!currentPhoto) return;
+
+    setIsLoaded(false);
+    setHasError(false);
+    setLoadSeconds(0);
 
     const fullUrl = getFullPhotoUrl(currentPhoto.imageUrl);
     const testImg = new Image();
@@ -29,8 +45,14 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
     if (testImg.complete && testImg.naturalWidth > 0) {
       setIsLoaded(true);
     } else {
-      setIsLoaded(false);
-      testImg.onload = () => setIsLoaded(true);
+      testImg.onload = () => {
+        setIsLoaded(true);
+        setHasError(false);
+      };
+      testImg.onerror = () => {
+        // Will show friendly retry UI
+        setHasError(true);
+      };
     }
 
     // Preload next image for instant transition
@@ -43,7 +65,7 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
       const prevImg = new Image();
       prevImg.src = getFullPhotoUrl(photos[currentIndex - 1].imageUrl);
     }
-  }, [currentIndex, currentPhoto, photos]);
+  }, [currentIndex, currentPhoto, photos, retryKey]);
 
   const handleNext = useCallback(() => {
     if (currentIndex < photos.length - 1) {
@@ -173,6 +195,47 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
             <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500 animate-pulse z-30" />
           )}
 
+          {/* Explicit Loading Spinner & Friendly Please Wait Message */}
+          {!isLoaded && !hasError && (
+            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-none transition-opacity duration-300 p-4">
+              <div className="flex flex-col items-center gap-3 p-4 sm:p-5 rounded-2xl bg-neutral-900/95 border border-neutral-800 shadow-2xl max-w-xs text-center">
+                <Loader2 className="w-6 h-6 text-amber-400 animate-spin" />
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-white tracking-tight">
+                    Loading high-resolution photo...
+                  </p>
+                  <p className="text-[11px] text-neutral-400 mt-1">
+                    {loadSeconds > 3
+                      ? "Downloading original quality, please wait a moment..."
+                      : "Please wait a moment"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Friendly Fallback on Network Glitch / Delay */}
+          {hasError && (
+            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/75 backdrop-blur-md p-4 text-center">
+              <div className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-neutral-900 border border-neutral-800 shadow-2xl max-w-xs">
+                <p className="text-sm font-semibold text-white">Taking a moment to load</p>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Please wait a moment and tap below to refresh the photo.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHasError(false);
+                    setIsLoaded(false);
+                    setRetryKey((k) => k + 1);
+                  }}
+                  className="px-4 py-2 rounded-lg gold-action-btn text-xs font-semibold shadow active:scale-95 transition"
+                >
+                  Refresh Photo
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Instant low-res thumbnail backdrop (renders in 0ms because already in browser memory) */}
           <img
@@ -187,10 +250,16 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
 
           {/* Full-resolution photograph */}
           <img
-            key={`full-${currentPhoto.id}`}
-            src={getFullPhotoUrl(currentPhoto.imageUrl)}
+            key={`full-${currentPhoto.id}-${retryKey}`}
+            src={getFullPhotoUrl(currentPhoto.imageUrl) + (retryKey > 0 ? `?retry=${retryKey}` : "")}
             alt={currentPhoto.fileName}
-            onLoad={() => setIsLoaded(true)}
+            onLoad={() => {
+              setIsLoaded(true);
+              setHasError(false);
+            }}
+            onError={() => {
+              setHasError(true);
+            }}
             className={`max-w-full max-h-[78vh] object-contain transition-opacity duration-300 relative z-20 select-none ${
               isLoaded ? "opacity-100" : "opacity-0"
             }`}

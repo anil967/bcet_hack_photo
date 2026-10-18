@@ -88,15 +88,20 @@ async def rate_limiting_and_logging_middleware(request: Request, call_next):
             status_code=500,
             content={
                 "success": False,
-                "error": "INTERNAL_ERROR",
-                "message": "An unexpected error occurred. Please try again later."
+                "error": "PLEASE_WAIT",
+                "message": "Please wait a moment while we prepare your photos."
             }
         )
 
-# Root endpoint (handles Render / health checks)
+# Root endpoint (handles Render / health checks, redirects browsers to frontend)
 @app.get("/", tags=["System"])
 @app.head("/", tags=["System"])
-async def root():
+async def root(request: Request):
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept:
+        from fastapi.responses import RedirectResponse
+        frontend_url = os.getenv("FRONTEND_URL", "https://bcet-hack-photo-beta.vercel.app")
+        return RedirectResponse(url=frontend_url)
     return {
         "status": "online",
         "service": "photofinder-backend",
