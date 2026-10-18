@@ -124,15 +124,16 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
       {/* Main Gallery Container */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-8 py-4 sm:py-6">
         {/* Subtle gallery helper banner */}
-        <div className="flex items-center justify-between mb-4 px-1 text-xs text-neutral-400">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-4 px-1 text-xs text-neutral-400">
           <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Tap any photograph to view in high resolution or save individual copies.</span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+            <span>Tap any photo to view in high resolution. If you miss any of your moments, please contact with us.</span>
           </div>
-          <span className="text-[11px] font-mono hidden md:inline text-neutral-400">
+          <span className="text-[11px] font-mono hidden md:inline text-neutral-500">
             High Confidence Matches
           </span>
         </div>
+
 
 
         {/* Adaptive Photography Grid: 2 columns on mobile, 3 on tablet, 4 on desktop */}

@@ -117,6 +117,9 @@ export default function Home() {
             <p className="text-xs sm:text-sm text-neutral-400 mt-1 leading-normal max-w-xs mx-auto">
               Take a quick selfie to discover all your photographs instantly.
             </p>
+            <p className="text-[10px] sm:text-[11px] text-neutral-500 mt-1 max-w-xs sm:max-w-sm mx-auto leading-tight">
+              <span className="text-amber-400/90 font-medium">Note:</span> This model is not guaranteed to retrieve all your moments. If you miss any of your photos, please contact with us.
+            </p>
           </div>
         )}
 
