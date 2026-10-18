@@ -43,11 +43,11 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
         }
       }}
       aria-label={`View photo ${photo.fileName}`}
-      className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-[#120b06] border border-[#f39c12]/25 hover:border-[#ffd700] transition-all duration-300 shadow-md hover:shadow-[0_8px_25px_rgba(243,156,18,0.25)] focus:outline-none focus:ring-2 focus:ring-[#ffd700] cursor-pointer"
+      className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800 hover:border-neutral-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
     >
       {/* Loading Skeleton */}
       {!isLoaded && (
-        <div className="absolute inset-0 bg-gradient-to-r from-[#140c06] via-[#24150b] to-[#140c06] animate-pulse" />
+        <div className="absolute inset-0 bg-neutral-800/80 animate-pulse" />
       )}
 
       {/* Main Photograph */}
@@ -56,22 +56,22 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
         alt={photo.fileName}
         loading="lazy"
         onLoad={() => setIsLoaded(true)}
-        className={`w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105 ${
+        className={`w-full h-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105 ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
       />
 
       {/* Elegant, Unobtrusive Match Pill (Top-Right, does not block faces) */}
       {photo.matchScore && (
-        <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-[#0a0705]/80 backdrop-blur-md border border-[#ffd700]/30 text-[10px] font-mono font-medium text-[#ffd700] shadow-sm flex items-center gap-1">
-          <Sparkles className="w-2.5 h-2.5 text-[#ffd700]" />
+        <div className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-neutral-700/80 text-[10px] font-mono font-medium text-neutral-200 shadow-sm flex items-center gap-1">
+          <Sparkles className="w-2.5 h-2.5 text-amber-400" />
           <span>{Math.round(photo.matchScore * 100)}%</span>
         </div>
       )}
 
       {/* Hover Information & Quick Action Bar */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0705]/95 via-[#0a0705]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-3">
-        <div className="text-xs font-heading font-medium text-[#f0e6d6] truncate max-w-[65%] drop-shadow">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-3">
+        <div className="text-xs font-medium text-white truncate max-w-[65%] drop-shadow">
           {photo.fileName}
         </div>
 
@@ -81,7 +81,7 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
             onClick={handleDownloadClick}
             title="Download high-resolution original"
             aria-label={`Download ${photo.fileName}`}
-            className="p-1.5 rounded-md bg-[#1c130b]/90 hover:bg-[#ffd700] text-[#ffd700] hover:text-[#0a0705] border border-[#f39c12]/40 hover:border-[#ffd700] transition shadow-md"
+            className="p-1.5 rounded-md bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 transition shadow"
           >
             {downloaded ? (
               <Check className="w-3.5 h-3.5 text-emerald-400" />
@@ -92,7 +92,7 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
 
           <div
             title="View Fullscreen"
-            className="p-1.5 rounded-md bg-[#ffd700] text-[#0a0705] hover:bg-white transition shadow-md"
+            className="p-1.5 rounded-md bg-amber-500 hover:bg-amber-400 text-neutral-950 transition shadow font-bold"
           >
             <Maximize2 className="w-3.5 h-3.5" />
           </div>
@@ -101,4 +101,5 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
     </div>
   );
 }
+
 

@@ -22,28 +22,28 @@ export function SearchProgress() {
 
   return (
     <div className="w-full max-w-md mx-auto py-12 px-6 flex flex-col items-center text-center">
-      {/* HackOdyssey Double Ring Radar Loader */}
-      <div className="relative w-28 h-28 flex items-center justify-center mb-8">
+      {/* Clean Modern Radar Loader without neon glow */}
+      <div className="relative w-24 h-24 flex items-center justify-center mb-6">
         {/* Outer Ring */}
-        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#ffd700] border-r-[#f39c12]/50 border-b-[#ffd700]/20 animate-spin" style={{ animationDuration: "1.2s" }} />
+        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-amber-500 border-r-amber-600/40 animate-spin" style={{ animationDuration: "1s" }} />
         {/* Inner Ring */}
-        <div className="absolute inset-3 rounded-full border-2 border-transparent border-b-[#ffe8a3] border-l-[#f39c12] animate-spin" style={{ animationDuration: "0.9s", animationDirection: "reverse" }} />
+        <div className="absolute inset-2.5 rounded-full border-2 border-transparent border-b-neutral-400 border-l-neutral-600 animate-spin" style={{ animationDuration: "0.8s", animationDirection: "reverse" }} />
         
-        {/* Center Golden Crest */}
-        <div className="relative w-14 h-14 rounded-full bg-[#120c07] border border-[#ffd700]/50 flex items-center justify-center text-[#ffd700] shadow-[0_0_20px_rgba(243,156,18,0.4)]">
-          {React.createElement(steps[currentStepIndex].icon, { className: "w-7 h-7 text-[#ffd700]" })}
+        {/* Center Icon */}
+        <div className="relative w-12 h-12 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center text-amber-400 shadow-md">
+          {React.createElement(steps[currentStepIndex].icon, { className: "w-6 h-6 text-amber-400" })}
         </div>
       </div>
 
-      <h3 className="text-xl font-heading font-bold text-white tracking-wide bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
+      <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
         {steps[currentStepIndex].title}
       </h3>
-      <p className="text-xs sm:text-sm text-[#a89680] font-body mt-2">
+      <p className="text-xs sm:text-sm text-neutral-400 mt-1">
         {steps[currentStepIndex].desc}
       </p>
 
       {/* Steps List */}
-      <div className="w-full mt-10 space-y-3 max-w-xs">
+      <div className="w-full mt-8 space-y-2.5 max-w-xs">
         {steps.map((step, idx) => {
           const isDone = idx < currentStepIndex;
           const isCurrent = idx === currentStepIndex;
@@ -51,28 +51,29 @@ export function SearchProgress() {
           return (
             <div
               key={step.title}
-              className={`flex items-center gap-3 text-xs p-2.5 rounded-none font-heading tracking-wide transition-colors ${
+              className={`flex items-center gap-3 text-xs p-2.5 rounded-lg border transition-colors ${
                 isCurrent
-                  ? "bg-[#1c130b] border border-[#ffd700]/40 text-[#ffd700]"
+                  ? "bg-neutral-900 border-amber-500/50 text-white font-medium"
                   : isDone
-                  ? "text-[#ffd700]/70"
-                  : "text-[#5e4c3a]"
+                  ? "border-neutral-800 text-neutral-300"
+                  : "border-transparent text-neutral-500"
               }`}
             >
               <div
                 className={`w-2 h-2 rounded-full ${
                   isCurrent
-                    ? "bg-[#ffd700] animate-ping"
+                    ? "bg-amber-400"
                     : isDone
-                    ? "bg-[#f39c12]"
-                    : "bg-[#332114]"
+                    ? "bg-emerald-400"
+                    : "bg-neutral-700"
                 }`}
               />
-              <span className="font-semibold">{step.title}</span>
+              <span>{step.title}</span>
             </div>
           );
         })}
       </div>
+
     </div>
   );
 }

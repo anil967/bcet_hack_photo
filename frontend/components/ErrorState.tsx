@@ -62,26 +62,27 @@ export function ErrorState({ errorCode, errorMessage, onRetry }: ErrorStateProps
 
   return (
     <div className="w-full max-w-md mx-auto py-12 px-6 flex flex-col items-center text-center">
-      <div className="w-16 h-16 rounded-full bg-red-950/40 border border-red-500/30 flex items-center justify-center text-red-400 mb-6 shadow-xl">
-        <IconComponent className="w-8 h-8" />
+      <div className="w-14 h-14 rounded-full bg-red-950/20 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 shadow">
+        <IconComponent className="w-7 h-7" />
       </div>
 
-      <h3 className="text-2xl font-heading font-bold text-white tracking-wide bg-gradient-to-r from-white via-red-200 to-red-400 bg-clip-text text-transparent">
+      <h3 className="text-xl font-bold text-white tracking-tight">
         {details.title}
       </h3>
 
-      <p className="text-xs sm:text-sm text-[#a89680] font-body mt-2 max-w-sm leading-relaxed">
+      <p className="text-xs sm:text-sm text-neutral-400 mt-2 max-w-sm leading-relaxed">
         {details.message}
       </p>
 
       <button
         type="button"
         onClick={onRetry}
-        className="mt-8 flex items-center justify-center gap-2 px-6 py-3 gold-action-btn font-heading text-xs tracking-wider uppercase"
+        className="mt-6 flex items-center justify-center gap-2 px-6 py-2.5 gold-action-btn text-xs font-semibold uppercase tracking-wider transition active:scale-95"
       >
-        <RotateCcw className="w-4 h-4 text-[#0a0705]" />
+        <RotateCcw className="w-4 h-4 text-neutral-950" />
         <span>{details.buttonText}</span>
       </button>
     </div>
   );
 }
+

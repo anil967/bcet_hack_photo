@@ -150,27 +150,27 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
 
   return (
     <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col items-center">
-      {/* Video Frame: Max height calibrated for mobile screens */}
-      <div className="relative w-full aspect-[3/4] max-h-[50vh] sm:max-h-[58vh] bg-[#0c0805] rounded-sm border-2 border-[#f39c12]/45 shadow-[0_10px_35px_rgba(0,0,0,0.95)] overflow-hidden flex items-center justify-center">
+      {/* Video Frame: Clean modern rounded card with subtle hairline border */}
+      <div className="relative w-full aspect-[3/4] max-h-[50vh] sm:max-h-[58vh] bg-neutral-950 rounded-2xl border border-neutral-800 shadow-2xl overflow-hidden flex items-center justify-center">
         {permissionError ? (
           <div className="p-5 text-center flex flex-col items-center justify-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-red-950/40 border border-red-500/30 flex items-center justify-center text-red-400">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-heading font-semibold text-[#f8f5ee]">Camera Access Required</h3>
-            <p className="text-xs text-[#c9bba8] leading-relaxed max-w-xs">{permissionError}</p>
+            <h3 className="text-base font-semibold text-white">Camera Access Required</h3>
+            <p className="text-xs text-neutral-400 leading-relaxed max-w-xs">{permissionError}</p>
             <div className="flex flex-col sm:flex-row gap-2 pt-1 w-full max-w-xs">
               <button
                 type="button"
                 onClick={startCamera}
-                className="w-full px-3 py-2 text-xs font-heading tracking-wider odyssey-secondary-btn"
+                className="w-full px-3 py-2 text-xs font-medium odyssey-secondary-btn"
               >
                 Try Again
               </button>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full px-3 py-2 text-xs font-heading tracking-wider gold-action-btn flex items-center justify-center gap-1.5"
+                className="w-full px-3 py-2 text-xs font-medium gold-action-btn flex items-center justify-center gap-1.5"
               >
                 <Upload className="w-3.5 h-3.5" />
                 Upload Photo
@@ -189,9 +189,9 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
               } ${isReady ? "opacity-100" : "opacity-0"}`}
             />
 
-            {/* Golden Face Guide Oval: Clean, unobtrusive glowing biometric reticle */}
+            {/* Minimalist Face Reticle: Clean, ultra-crisp subtle guide without neon glow */}
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="w-[62%] max-w-[200px] aspect-[3/4] rounded-[50%] border-2 border-dashed border-[#ffd700]/80 shadow-[0_0_25px_rgba(255,215,0,0.35)] animate-pulse-slow" />
+              <div className="w-[60%] max-w-[200px] aspect-[3/4] rounded-full border-2 border-dashed border-white/30" />
             </div>
 
             {/* Top right camera toggle */}
@@ -202,7 +202,7 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
                   onClick={toggleCamera}
                   title="Switch Camera"
                   aria-label="Switch Camera"
-                  className="p-2 rounded-full bg-[#140d07]/80 hover:bg-[#23170d] text-[#ffd700] border border-[#f39c12]/40 backdrop-blur-md transition shadow-lg"
+                  className="p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white border border-neutral-700/80 backdrop-blur-md transition shadow-md active:scale-95"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                 </button>
@@ -212,33 +212,33 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
         )}
       </div>
 
-      {/* Camera Controls Bar (Directly beneath camera frame for zero scrolling) */}
+      {/* Camera Controls Bar: Neatly structured and balanced */}
       <div className="w-full flex items-center justify-center gap-5 mt-4">
         {/* Upload file fallback */}
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          title="Upload from device"
+          title="Upload photo from device"
           aria-label="Upload photo from device"
-          className="p-3 rounded-full bg-[#140d07] hover:bg-[#23170d] text-[#ffd700] border border-[#f39c12]/45 transition hover:border-[#ffd700] shadow-md"
+          className="p-3.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 transition active:scale-95 shadow-md"
         >
           <Upload className="w-5 h-5" />
         </button>
 
-        {/* Primary Shutter Button with HackOdyssey Spartan Medallion */}
+        {/* Primary Shutter Button with HackOdyssey Spartan Medallion (Clean natural ring, zero neon blur) */}
         <button
           type="button"
           onClick={handleCapture}
           disabled={!isReady}
           aria-label="Take Selfie"
           title="Take Selfie"
-          className="relative group p-1 rounded-full bg-gradient-to-tr from-[#b78103]/50 via-[#ffd700]/70 to-[#f39c12]/50 hover:from-[#ffd700] hover:to-[#ffd700] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_25px_rgba(243,156,18,0.5),0_6px_20px_rgba(0,0,0,0.8)] active:scale-90 hover:scale-105"
+          className="relative group p-1 rounded-full bg-neutral-800 border-2 border-neutral-600 hover:border-neutral-400 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg active:scale-95"
         >
-          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full overflow-hidden flex items-center justify-center border-2 border-[#ffd700] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)] bg-[#140c06]">
+          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full overflow-hidden flex items-center justify-center bg-neutral-950 border border-neutral-700">
             <img
               src="/odyssey_shutter.png"
-              alt="Capture Selfie"
-              className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-300 group-hover:scale-110 group-active:scale-95"
+              alt="Take Selfie"
+              className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-200 group-hover:scale-105 group-active:scale-95"
             />
           </div>
         </button>
@@ -250,14 +250,15 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
             onClick={toggleCamera}
             title="Switch Camera"
             aria-label="Switch Camera"
-            className="p-3 rounded-full bg-[#140d07] hover:bg-[#23170d] text-[#ffd700] border border-[#f39c12]/45 transition hover:border-[#ffd700] shadow-md"
+            className="p-3.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 transition active:scale-95 shadow-md"
           >
             <RefreshCw className="w-5 h-5" />
           </button>
         ) : (
-          <div className="w-11 h-11" />
+          <div className="w-12 h-12" />
         )}
       </div>
+
 
       <input
         ref={fileInputRef}

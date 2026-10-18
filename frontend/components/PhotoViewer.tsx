@@ -111,14 +111,14 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
       role="dialog"
       aria-modal="true"
       aria-label="Photo Lightbox"
-      className="fixed inset-0 z-50 bg-[#050302]/95 backdrop-blur-md flex flex-col justify-between select-none"
+      className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {/* Header Bar */}
-      <div className="flex items-center justify-between p-4 sm:p-6 text-zinc-300 z-10 border-b border-[#f39c12]/20 bg-[#0a0705]/80">
+      <div className="flex items-center justify-between p-4 sm:p-5 text-neutral-300 z-10 border-b border-neutral-800 bg-neutral-950/80">
         {/* Counter */}
-        <div className="text-xs font-heading font-bold tracking-widest text-[#ffd700] bg-[#1a0f08] px-3.5 py-1.5 border border-[#f39c12]/40">
+        <div className="text-xs font-mono font-medium tracking-wide text-neutral-200 bg-neutral-800 px-3 py-1 rounded-full border border-neutral-700">
           {currentIndex + 1} / {photos.length}
         </div>
 
@@ -128,7 +128,7 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
             type="button"
             onClick={handleDownload}
             aria-label="Download photo"
-            className="flex items-center gap-2 px-4 py-2 gold-action-btn font-heading text-xs tracking-wider uppercase"
+            className="flex items-center gap-2 px-4 py-2 gold-action-btn text-xs font-semibold uppercase tracking-wider shadow"
           >
             {downloaded ? (
               <>
@@ -137,7 +137,7 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
               </>
             ) : (
               <>
-                <Download className="w-4 h-4 text-[#0a0705]" />
+                <Download className="w-4 h-4 text-neutral-950" />
                 <span>Download</span>
               </>
             )}
@@ -147,7 +147,7 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
             type="button"
             onClick={onClose}
             aria-label="Close Lightbox"
-            className="p-2 odyssey-secondary-btn hover:border-[#ffd700] text-[#ffd700]"
+            className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white border border-neutral-700 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -161,17 +161,18 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
             type="button"
             onClick={handlePrev}
             aria-label="Previous photograph"
-            className="absolute left-4 sm:left-8 p-3.5 odyssey-secondary-btn text-[#ffd700] z-10 shadow-2xl hover:scale-110 transition"
+            className="absolute left-4 sm:left-8 p-3 rounded-full bg-neutral-900/80 hover:bg-neutral-800 text-white border border-neutral-700 z-10 shadow-xl transition active:scale-95"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
         )}
 
-        <div className="relative max-w-5xl max-h-[80vh] flex items-center justify-center border border-[#f39c12]/30 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden bg-[#0c0805]">
-          {/* Subtle gold loading bar at the top of the frame while high-res loads */}
+        <div className="relative max-w-5xl max-h-[80vh] flex items-center justify-center rounded-xl border border-neutral-800 shadow-2xl overflow-hidden bg-neutral-950">
+          {/* Subtle loading indicator at the top of the frame while high-res loads */}
           {!isLoaded && (
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#ffd700] to-transparent animate-pulse z-30" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500 animate-pulse z-30" />
           )}
+
 
           {/* Instant low-res thumbnail backdrop (renders in 0ms because already in browser memory) */}
           <img

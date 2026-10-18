@@ -19,12 +19,8 @@
 }
 
 html, body {
-  color: #e0d5c1;
-  background-color: #0a0705;
-  background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(243, 156, 18, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 60% at 20% 40%, rgba(183, 129, 3, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(142, 90, 43, 0.07) 0%, transparent 50%);
+  color: #f1f5f9;
+  background-color: #0c0e12;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100%;
@@ -34,37 +30,40 @@ html, body {
   overflow-x: hidden;
 }
 
-/* HackOdyssey Gold Action Button */
+/* Natural Theme Primary Action Button */
 .gold-action-btn {
-  background: linear-gradient(135deg, #b78103 0%, #f39c12 100%);
-  border: 1px solid #ffd700;
-  color: #0a0705;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 15px rgba(243, 156, 18, 0.25);
+  background: #f59e0b;
+  color: #0f172a;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  border: 1px solid #d97706;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .gold-action-btn:hover {
-  background: linear-gradient(135deg, #f39c12 0%, #ffd700 100%);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.45);
-  transform: translateY(-2px);
-  color: #000;
+  background: #fbbf24;
+  color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Secondary Odyssey Button */
+/* Natural Theme Secondary Button */
 .odyssey-secondary-btn {
-  background: #1c130bcc;
-  border: 1px solid rgba(243, 156, 18, 0.4);
-  color: #d1c4b0;
-  transition: all 0.25s ease;
+  background: #181b22;
+  border: 1px solid #2d3340;
+  color: #e2e8f0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  border-radius: 0.5rem;
 }
 
 .odyssey-secondary-btn:hover {
-  border-color: #ffd700;
-  color: #fff;
-  background: #2a1b0fee;
-  box-shadow: 0 0 12px rgba(243, 156, 18, 0.25);
+  border-color: #4b5563;
+  background: #222732;
+  color: #ffffff;
 }
 
 /* Hide scrollbars completely across all modern browsers while maintaining smooth scrolling */

@@ -51,13 +51,13 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#0a0705]">
-      {/* Sticky Frosted Glass Gallery Header */}
-      <header className="sticky top-0 z-30 w-full bg-[#0a0705]/90 backdrop-blur-md border-b border-[#f39c12]/20 px-3 sm:px-8 py-3 shadow-[0_4px_25px_rgba(0,0,0,0.6)]">
+    <div className="w-full min-h-screen flex flex-col bg-[#0c0e12]">
+      {/* Sticky Frosted Glass Gallery Header (Natural theme, clean hairline border) */}
+      <header className="sticky top-0 z-30 w-full bg-[#0c0e12]/95 backdrop-blur-md border-b border-neutral-800 px-3 sm:px-8 py-3.5 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           {/* Brand & Stats */}
           <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-[#ffd700] shadow-[0_0_12px_rgba(243,156,18,0.4)] flex-shrink-0 bg-[#140c06]">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-neutral-700 shadow flex-shrink-0 bg-neutral-900">
               <img
                 src="/odyssey_shutter.png"
                 alt="HackOdyssey Medallion"
@@ -67,16 +67,16 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-base sm:text-xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent truncate">
+                <h1 className="text-base sm:text-lg font-bold tracking-tight text-white truncate">
                   Your Odyssey Moments
                 </h1>
-                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-heading font-semibold bg-[#f39c12]/15 text-[#ffd700] border border-[#f39c12]/35">
-                  <Images className="w-3 h-3 text-[#ffd700]" />
+                <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-800 text-neutral-300 border border-neutral-700">
+                  <Images className="w-3 h-3 text-neutral-400" />
                   {photos.length} Photos
                 </span>
               </div>
-              <p className="text-[11px] text-[#a89680] truncate hidden sm:block">
-                The Odyssey Hackathon 2K26 • Official Matched Gallery
+              <p className="text-xs text-neutral-400 truncate hidden sm:block">
+                The Odyssey Hackathon 2K26 • Matched Photographs
               </p>
             </div>
           </div>
@@ -84,7 +84,7 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
           {/* Action Buttons */}
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Mobile Photo Count Badge */}
-            <span className="sm:hidden text-xs font-heading font-bold text-[#ffd700] px-2 py-1 bg-[#140c06] border border-[#f39c12]/30 rounded-md">
+            <span className="sm:hidden text-xs font-semibold text-neutral-300 px-2 py-1 bg-neutral-800 border border-neutral-700 rounded-md">
               {photos.length}
             </span>
 
@@ -92,9 +92,9 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
               type="button"
               onClick={onReset}
               title="Search with another selfie"
-              className="flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-[#140c06] hover:bg-[#20140b] text-[#ffd700] border border-[#f39c12]/40 hover:border-[#ffd700] transition active:scale-95 text-xs font-heading tracking-wider uppercase shadow"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 transition active:scale-95 text-xs font-medium shadow-sm"
             >
-              <Camera className="w-3.5 h-3.5 text-[#ffd700]" />
+              <Camera className="w-3.5 h-3.5 text-neutral-400" />
               <span className="hidden xs:inline sm:inline">Search Again</span>
             </button>
 
@@ -103,16 +103,16 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
               onClick={handleDownloadAll}
               disabled={downloadingAll}
               title="Download all matched photographs"
-              className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg gold-action-btn transition active:scale-95 text-xs font-heading tracking-wider uppercase disabled:opacity-60 shadow-md"
+              className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg gold-action-btn transition active:scale-95 text-xs font-semibold disabled:opacity-60 shadow"
             >
               {downloadingAll ? (
                 <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0a0705]" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-neutral-900" />
                   <span>({downloadedCount}/{photos.length})</span>
                 </>
               ) : (
                 <>
-                  <Download className="w-3.5 h-3.5 text-[#0a0705]" />
+                  <Download className="w-3.5 h-3.5 text-neutral-900" />
                   <span>Download All</span>
                 </>
               )}
@@ -124,15 +124,16 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
       {/* Main Gallery Container */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-8 py-4 sm:py-6">
         {/* Subtle gallery helper banner */}
-        <div className="flex items-center justify-between mb-4 px-1 text-xs text-[#8e7a63]">
+        <div className="flex items-center justify-between mb-4 px-1 text-xs text-neutral-400">
           <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#ffd700]/70" />
-            <span>Tap any photograph to view in high-resolution full screen.</span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Tap any photograph to view in high resolution or save individual copies.</span>
           </div>
-          <span className="text-[11px] font-mono hidden md:inline text-[#a89680]">
-            Match Quality: High
+          <span className="text-[11px] font-mono hidden md:inline text-neutral-400">
+            High Confidence Matches
           </span>
         </div>
+
 
         {/* Adaptive Photography Grid: 2 columns on mobile, 3 on tablet, 4 on desktop */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
