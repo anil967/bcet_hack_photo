@@ -281,14 +281,32 @@ class DriveService:
 
     def get_thumbnail_bytes(self, file_id: str) -> Tuple[bytes, str]:
         """
-        Retrieves or generates an optimized thumbnail (max 400px) with disk caching.
+        Retrieves or generates an optimized thumbnail (max 450px) with high-speed disk caching.
         """
         cache_path = os.path.join(self.thumbnail_cache_dir, f"{file_id}_thumb.jpg")
         if os.path.exists(cache_path):
             with open(cache_path, "rb") as f:
                 return f.read(), "image/jpeg"
 
-        # Generate thumbnail from source photo
+        # 1. High-Speed Fast Path: Fetch pre-computed thumbnail directly from Google Drive CDN (~100-300KB instead of 20MB)
+        if self.is_drive_mode:
+            try:
+                import urllib.request
+                thumb_url = f"https://drive.google.com/thumbnail?id={file_id}&sz=w600"
+                req = urllib.request.Request(thumb_url, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req, timeout=5) as response:
+                    thumb_data = response.read()
+                    if thumb_data and len(thumb_data) > 1024:
+                        try:
+                            with open(cache_path, "wb") as f:
+                                f.write(thumb_data)
+                        except Exception:
+                            pass
+                        return thumb_data, "image/jpeg"
+            except Exception as e:
+                logger.debug(f"Direct Google thumbnail fetch skipped for {file_id}: {e}. Falling back to full render.")
+
+        # 2. Local/Offline Fallback: Generate thumbnail from source photo
         photo_bytes, _ = self.get_photo_bytes(file_id)
         image = Image.open(io.BytesIO(photo_bytes))
         image.thumbnail((450, 450), Image.Resampling.LANCZOS)

@@ -15,12 +15,12 @@ logger = logging.getLogger("photofinder.api")
 router = APIRouter(prefix="/api")
 
 def prewarm_photos(photo_ids: List[str]):
-    """Background task to pre-cache matching photos to disk so viewer is instantaneous."""
+    """Background task to pre-cache matching thumbnails to disk so gallery is instantaneous."""
     for pid in photo_ids:
         try:
-            drive_service.get_photo_bytes(pid)
+            drive_service.get_thumbnail_bytes(pid)
         except Exception as e:
-            logger.debug(f"Prewarm skipped for {pid}: {e}")
+            logger.debug(f"Prewarm thumbnail skipped for {pid}: {e}")
 
 # Pydantic schemas
 class SearchPhotoRequest(BaseModel):

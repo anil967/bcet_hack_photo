@@ -14,8 +14,9 @@ interface PhotoCardProps {
 export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const thumbUrl = getFullPhotoUrl(photo.thumbnailUrl);
+  const thumbUrl = getFullPhotoUrl(photo.thumbnailUrl) + (retryCount > 0 ? `?retry=${retryCount}` : "");
 
   const handleDownloadClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -56,6 +57,11 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
         alt={photo.fileName}
         loading="lazy"
         onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          if (retryCount < 2) {
+            setTimeout(() => setRetryCount((c) => c + 1), 1500);
+          }
+        }}
         className={`w-full h-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105 ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
