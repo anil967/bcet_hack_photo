@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Maximize2, Download, Check, Sparkles } from "lucide-react";
+import { Maximize2, Download, Check } from "lucide-react";
 import { PhotoItem, getFullPhotoUrl } from "../lib/api";
 
 interface PhotoCardProps {
@@ -60,14 +60,6 @@ export function PhotoCard({ photo, index, onView, onDownload }: PhotoCardProps) 
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
       />
-
-      {/* Elegant, Unobtrusive Match Pill (Top-Right, does not block faces) */}
-      {photo.matchScore && (
-        <div className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-neutral-700/80 text-[10px] font-mono font-medium text-neutral-200 shadow-sm flex items-center gap-1">
-          <Sparkles className="w-2.5 h-2.5 text-amber-400" />
-          <span>{Math.round(photo.matchScore * 100)}%</span>
-        </div>
-      )}
 
       {/* Hover Information & Quick Action Bar */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-3">

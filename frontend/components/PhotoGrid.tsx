@@ -123,10 +123,8 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
             <Sparkles className="w-4 h-4 text-amber-400 flex-shrink-0" />
             <span className="leading-tight">Tap any photo to view in high resolution. If you miss any of your moments, please contact with us.</span>
           </div>
-          <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded-md bg-neutral-800 text-[11px] font-mono text-neutral-300 flex-shrink-0">
-            ≥ 50% Match
-          </span>
         </div>
+
 
 
         {/* Adaptive Photography Grid: 2 columns on mobile, 3 on tablet, 4 on desktop */}
