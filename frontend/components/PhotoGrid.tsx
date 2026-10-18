@@ -15,15 +15,18 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [downloadedCount, setDownloadedCount] = useState(0);
 
+  // Strictly show only photos matching 50% or greater (>= 0.50)
+  const qualifiedPhotos = photos.filter((p) => (p.matchScore ?? 1.0) >= 0.50);
+
   // Pre-cache full-resolution images for the top photos in the background
   useEffect(() => {
-    if (photos && photos.length > 0) {
-      photos.slice(0, 8).forEach((p) => {
+    if (qualifiedPhotos && qualifiedPhotos.length > 0) {
+      qualifiedPhotos.slice(0, 8).forEach((p) => {
         const img = new Image();
         img.src = getFullPhotoUrl(p.imageUrl);
       });
     }
-  }, [photos]);
+  }, [qualifiedPhotos]);
 
   const downloadSinglePhoto = (photo: PhotoItem) => {
     const downloadUrl = getFullPhotoUrl(photo.downloadUrl);
@@ -36,19 +39,20 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   };
 
   const handleDownloadAll = async () => {
-    if (downloadingAll || photos.length === 0) return;
+    if (downloadingAll || qualifiedPhotos.length === 0) return;
 
     setDownloadingAll(true);
     setDownloadedCount(0);
 
-    for (let i = 0; i < photos.length; i++) {
-      downloadSinglePhoto(photos[i]);
+    for (let i = 0; i < qualifiedPhotos.length; i++) {
+      downloadSinglePhoto(qualifiedPhotos[i]);
       setDownloadedCount(i + 1);
       await new Promise((resolve) => setTimeout(resolve, 350));
     }
 
     setDownloadingAll(false);
   };
+
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#0c0e12]">
@@ -72,11 +76,11 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
                 </h1>
                 <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-800 text-neutral-300 border border-neutral-700">
                   <Images className="w-3 h-3 text-neutral-400" />
-                  {photos.length} Photos
+                  {qualifiedPhotos.length} Photos
                 </span>
               </div>
               <p className="text-xs text-neutral-400 truncate hidden sm:block">
-                The Odyssey Hackathon 2K26 • Matched Photographs
+                The Odyssey Hackathon 2K26 • Matched Photographs (≥ 50% Match)
               </p>
             </div>
           </div>
@@ -85,7 +89,7 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Mobile Photo Count Badge */}
             <span className="sm:hidden text-xs font-semibold text-neutral-300 px-2 py-1 bg-neutral-800 border border-neutral-700 rounded-md">
-              {photos.length}
+              {qualifiedPhotos.length}
             </span>
 
             <button
@@ -108,7 +112,7 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
               {downloadingAll ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin text-neutral-900" />
-                  <span>({downloadedCount}/{photos.length})</span>
+                  <span>({downloadedCount}/{qualifiedPhotos.length})</span>
                 </>
               ) : (
                 <>
@@ -130,15 +134,13 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
             <span>Tap any photo to view in high resolution. If you miss any of your moments, please contact with us.</span>
           </div>
           <span className="text-[11px] font-mono hidden md:inline text-neutral-500">
-            High Confidence Matches
+            ≥ 50% Match Confidence
           </span>
         </div>
 
-
-
         {/* Adaptive Photography Grid: 2 columns on mobile, 3 on tablet, 4 on desktop */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
-          {photos.map((photo, index) => (
+          {qualifiedPhotos.map((photo, index) => (
             <PhotoCard
               key={photo.id}
               photo={photo}
@@ -148,6 +150,7 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
             />
           ))}
         </div>
+
       </main>
     </div>
   );

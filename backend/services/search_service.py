@@ -81,9 +81,24 @@ class SearchService:
         # Ensure vector shape is (1, d) and float32
         vec = query_vector.astype(np.float32).reshape(1, -1)
         
-        # Dynamic threshold: allows immediate tuning in .env without server restart
-        thresh_env = os.getenv("FACE_MATCH_THRESHOLD")
-        threshold = float(thresh_env) if thresh_env else self.match_threshold
+        # Dynamic threshold: read directly from .env and enforce minimum 50% match
+        threshold = 0.50
+        env_file = os.path.join(self.root_dir, ".env")
+        if os.path.exists(env_file):
+            try:
+                from dotenv import dotenv_values
+                env_vals = dotenv_values(env_file)
+                if "FACE_MATCH_THRESHOLD" in env_vals and env_vals["FACE_MATCH_THRESHOLD"]:
+                    threshold = float(env_vals["FACE_MATCH_THRESHOLD"])
+            except Exception:
+                pass
+        else:
+            thresh_env = os.getenv("FACE_MATCH_THRESHOLD")
+            if thresh_env:
+                threshold = float(thresh_env)
+
+        # Strictly enforce >= 50% match (0.50)
+        threshold = max(0.50, threshold)
 
         # Inner product search
         scores, indices = self.index.search(vec, min(top_k, self.index.ntotal))
