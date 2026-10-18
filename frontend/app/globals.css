@@ -67,24 +67,26 @@ html, body {
   box-shadow: 0 0 12px rgba(243, 156, 18, 0.25);
 }
 
-/* Custom gold scrollbar */
+/* Hide scrollbars completely across all modern browsers while maintaining smooth scrolling */
+html, body, * {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
 }
 
-::-webkit-scrollbar-track {
-  background: #0a0705;
+.no-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
-
-::-webkit-scrollbar-thumb {
-  background: #3d2508;
-  border: 1px solid rgba(243, 156, 18, 0.3);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #8e5a2b;
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Accessible gold focus outline */

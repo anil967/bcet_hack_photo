@@ -90,14 +90,16 @@ export default function Home() {
       className={`flex flex-col ${
         isCaptureStage
           ? "h-[100dvh] max-h-[100dvh] overflow-hidden justify-between py-2 sm:py-4 px-3 sm:px-6"
-          : "min-h-[100dvh] overflow-y-auto justify-start py-4 sm:py-6 px-3 sm:px-6"
+          : "min-h-[100dvh] overflow-y-auto no-scrollbar justify-start py-0 px-0"
       } bg-[#0a0705] text-[#e0d5c1] select-none`}
     >
       {/* Main Container */}
       <main
-        className={`w-full max-w-4xl mx-auto flex flex-col items-center ${
-          isCaptureStage ? "flex-1 min-h-0 justify-between" : "flex-1 justify-center"
-        }`}
+        className={`w-full ${
+          isCaptureStage
+            ? "max-w-md mx-auto flex-1 min-h-0 justify-between items-center px-3"
+            : "w-full mx-auto flex-1 justify-start items-stretch"
+        } flex flex-col`}
       >
         {/* Compact Hero Header (No top bar) */}
         {(stage === "camera" || stage === "preview") && (

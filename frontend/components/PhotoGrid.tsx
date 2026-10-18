@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Download, Camera, Loader2 } from "lucide-react";
+import { Download, Camera, Loader2, Sparkles, Images } from "lucide-react";
 import { PhotoItem, getFullPhotoUrl } from "../lib/api";
 import { PhotoCard } from "./PhotoCard";
 
@@ -51,67 +51,103 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 sm:px-6 py-4 sm:py-8">
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 sm:pb-6 border-b border-[#f39c12]/30">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <h2 className="text-xl sm:text-3xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent">
-              Your Odyssey Moments
-            </h2>
-            <span className="px-2.5 py-0.5 text-[11px] sm:text-xs font-heading font-bold tracking-wider uppercase bg-[#f39c12]/15 text-[#ffd700] border border-[#f39c12]/40">
-              {photos.length} Found
-            </span>
+    <div className="w-full min-h-screen flex flex-col bg-[#0a0705]">
+      {/* Sticky Frosted Glass Gallery Header */}
+      <header className="sticky top-0 z-30 w-full bg-[#0a0705]/90 backdrop-blur-md border-b border-[#f39c12]/20 px-3 sm:px-8 py-3 shadow-[0_4px_25px_rgba(0,0,0,0.6)]">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+          {/* Brand & Stats */}
+          <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-[#ffd700] shadow-[0_0_12px_rgba(243,156,18,0.4)] flex-shrink-0 bg-[#140c06]">
+              <img
+                src="/odyssey_shutter.png"
+                alt="HackOdyssey Medallion"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h1 className="text-base sm:text-xl font-heading font-bold tracking-tight bg-gradient-to-r from-white via-[#ffd700] to-[#f39c12] bg-clip-text text-transparent truncate">
+                  Your Odyssey Moments
+                </h1>
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-heading font-semibold bg-[#f39c12]/15 text-[#ffd700] border border-[#f39c12]/35">
+                  <Images className="w-3 h-3 text-[#ffd700]" />
+                  {photos.length} Photos
+                </span>
+              </div>
+              <p className="text-[11px] text-[#a89680] truncate hidden sm:block">
+                The Odyssey Hackathon 2K26 • Official Matched Gallery
+              </p>
+            </div>
           </div>
-          <p className="text-[11px] sm:text-xs text-[#a89680] font-body mt-0.5">
-            Photographs captured across The Odyssey Hackathon 2K26.
-          </p>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Mobile Photo Count Badge */}
+            <span className="sm:hidden text-xs font-heading font-bold text-[#ffd700] px-2 py-1 bg-[#140c06] border border-[#f39c12]/30 rounded-md">
+              {photos.length}
+            </span>
+
+            <button
+              type="button"
+              onClick={onReset}
+              title="Search with another selfie"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-[#140c06] hover:bg-[#20140b] text-[#ffd700] border border-[#f39c12]/40 hover:border-[#ffd700] transition active:scale-95 text-xs font-heading tracking-wider uppercase shadow"
+            >
+              <Camera className="w-3.5 h-3.5 text-[#ffd700]" />
+              <span className="hidden xs:inline sm:inline">Search Again</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleDownloadAll}
+              disabled={downloadingAll}
+              title="Download all matched photographs"
+              className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg gold-action-btn transition active:scale-95 text-xs font-heading tracking-wider uppercase disabled:opacity-60 shadow-md"
+            >
+              {downloadingAll ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0a0705]" />
+                  <span>({downloadedCount}/{photos.length})</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-3.5 h-3.5 text-[#0a0705]" />
+                  <span>Download All</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Gallery Container */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-8 py-4 sm:py-6">
+        {/* Subtle gallery helper banner */}
+        <div className="flex items-center justify-between mb-4 px-1 text-xs text-[#8e7a63]">
+          <div className="flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-[#ffd700]/70" />
+            <span>Tap any photograph to view in high-resolution full screen.</span>
+          </div>
+          <span className="text-[11px] font-mono hidden md:inline text-[#a89680]">
+            Match Quality: High
+          </span>
         </div>
 
-        {/* Action buttons */}
-        <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-          <button
-            type="button"
-            onClick={onReset}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 odyssey-secondary-btn font-heading text-xs tracking-wider uppercase active:scale-95 transition"
-          >
-            <Camera className="w-3.5 h-3.5 text-[#ffd700]" />
-            <span>Search Again</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleDownloadAll}
-            disabled={downloadingAll}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 gold-action-btn font-heading text-xs tracking-wider uppercase disabled:opacity-60 active:scale-95 transition"
-          >
-            {downloadingAll ? (
-              <>
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0a0705]" />
-                <span>({downloadedCount}/{photos.length})</span>
-              </>
-            ) : (
-              <>
-                <Download className="w-3.5 h-3.5 text-[#0a0705]" />
-                <span>Download All</span>
-              </>
-            )}
-          </button>
+        {/* Adaptive Photography Grid: 2 columns on mobile, 3 on tablet, 4 on desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
+          {photos.map((photo, index) => (
+            <PhotoCard
+              key={photo.id}
+              photo={photo}
+              index={index}
+              onView={onViewPhoto}
+              onDownload={downloadSinglePhoto}
+            />
+          ))}
         </div>
-      </div>
-
-      {/* Mobile-optimized Grid: 2 columns mobile with tight clean gaps */}
-      <div className="mt-5 sm:mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-5">
-        {photos.map((photo, index) => (
-          <PhotoCard
-            key={photo.id}
-            photo={photo}
-            index={index}
-            onView={onViewPhoto}
-            onDownload={downloadSinglePhoto}
-          />
-        ))}
-      </div>
+      </main>
     </div>
   );
 }
+

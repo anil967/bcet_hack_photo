@@ -81,10 +81,15 @@ class SearchService:
         # Ensure vector shape is (1, d) and float32
         vec = query_vector.astype(np.float32).reshape(1, -1)
         
+        # Dynamic threshold: allows immediate tuning in .env without server restart
+        thresh_env = os.getenv("FACE_MATCH_THRESHOLD")
+        threshold = float(thresh_env) if thresh_env else self.match_threshold
+
         # Inner product search
         scores, indices = self.index.search(vec, min(top_k, self.index.ntotal))
 
         matched_photos_map = {} # file_id -> photo dict
+        top_score = float(scores[0][0]) if len(scores[0]) > 0 and indices[0][0] >= 0 else 0.0
         
         for score, idx in zip(scores[0], indices[0]):
             if idx < 0:
@@ -94,7 +99,7 @@ class SearchService:
                 continue
 
             sim_score = float(score)
-            if sim_score >= self.match_threshold:
+            if sim_score >= threshold:
                 meta = self.metadata[idx_str]
                 file_id = meta["file_id"]
                 file_name = meta.get("file_name", file_id)
@@ -112,6 +117,11 @@ class SearchService:
                 else:
                     if sim_score > matched_photos_map[file_id]["matchScore"]:
                         matched_photos_map[file_id]["matchScore"] = round(sim_score, 4)
+
+        logger.info(
+            f"Search evaluated with threshold {threshold:.2f}: "
+            f"found {len(matched_photos_map)} matches (highest score: {top_score:.3f})"
+        )
 
         # Sort results by similarity score descending
         results = list(matched_photos_map.values())
