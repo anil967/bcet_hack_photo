@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AlertTriangle, Users, ScanFace, WifiOff, Clock, RotateCcw } from "lucide-react";
+import { AlertTriangle, Users, ScanFace, WifiOff, Clock, RotateCcw, ShieldCheck, HelpCircle } from "lucide-react";
 
 interface ErrorStateProps {
   errorCode: string;
@@ -61,27 +61,80 @@ export function ErrorState({ errorCode, errorMessage, onRetry }: ErrorStateProps
   const IconComponent = details.icon;
 
   return (
-    <div className="w-full max-w-md mx-auto py-12 px-6 flex flex-col items-center text-center">
-      <div className="w-14 h-14 rounded-full bg-red-950/20 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 shadow">
-        <IconComponent className="w-7 h-7" />
-      </div>
+    <div className="w-full min-h-screen flex flex-col bg-[#0c0e12]">
+      {/* Sticky Top Header Bar (Consistent with Gallery & Empty State) */}
+      <header className="sticky top-0 z-30 w-full bg-[#0c0e12]/95 backdrop-blur-md border-b border-neutral-800 px-3 sm:px-8 py-3 shadow-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-neutral-700 shadow-sm flex-shrink-0 bg-neutral-900">
+              <img
+                src="/odyssey_shutter.png"
+                alt="HackOdyssey Medallion"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm sm:text-base font-bold text-white tracking-tight truncate">
+                The Odyssey Hackathon 2K26
+              </h1>
+              <p className="text-[11px] text-neutral-400 truncate">System Notice</p>
+            </div>
+          </div>
 
-      <h3 className="text-xl font-bold text-white tracking-tight">
-        {details.title}
-      </h3>
+          <button
+            type="button"
+            onClick={onRetry}
+            className="flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 transition active:scale-95 text-xs font-medium shadow-sm flex-shrink-0"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-neutral-400" />
+            <span>Try Again</span>
+          </button>
+        </div>
+      </header>
 
-      <p className="text-xs sm:text-sm text-neutral-400 mt-2 max-w-sm leading-relaxed">
-        {details.message}
-      </p>
+      {/* Main Centered Body */}
+      <main className="flex-1 w-full max-w-lg mx-auto px-4 py-8 sm:py-12 flex flex-col items-center justify-center">
+        {/* Status Icon */}
+        <div className="w-16 h-16 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-amber-400 mb-4 shadow-sm">
+          <IconComponent className="w-8 h-8 text-amber-400" />
+        </div>
 
-      <button
-        type="button"
-        onClick={onRetry}
-        className="mt-6 flex items-center justify-center gap-2 px-6 py-2.5 gold-action-btn text-xs font-semibold uppercase tracking-wider transition active:scale-95"
-      >
-        <RotateCcw className="w-4 h-4 text-neutral-950" />
-        <span>{details.buttonText}</span>
-      </button>
+        {/* Heading & Subtitle */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight text-center">
+          {details.title}
+        </h2>
+        <p className="text-xs sm:text-sm text-neutral-400 text-center mt-2 max-w-sm leading-relaxed">
+          {details.message}
+        </p>
+
+        {/* Contact Note */}
+        <div className="w-full mt-6 p-3.5 rounded-xl bg-neutral-900/40 border border-neutral-800/80 flex items-start gap-2.5 text-xs text-neutral-400">
+          <HelpCircle className="w-4 h-4 text-amber-400/90 flex-shrink-0 mt-0.5" />
+          <p className="leading-relaxed text-[11px] sm:text-xs text-neutral-400">
+            <strong className="text-neutral-200 font-semibold">Need help?</strong> If you continue having trouble finding your event moments, please contact our photography team.
+          </p>
+        </div>
+
+        {/* Primary Call to Action Button */}
+        <div className="w-full mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={onRetry}
+            className="w-full sm:w-auto min-w-[220px] flex items-center justify-center gap-2 px-6 py-3 rounded-xl gold-action-btn text-xs font-semibold uppercase tracking-wider transition active:scale-95 shadow-md"
+          >
+            <RotateCcw className="w-4 h-4 text-neutral-950" />
+            <span>{details.buttonText}</span>
+          </button>
+        </div>
+      </main>
+
+      {/* Structured Clean Footer */}
+      <footer className="w-full text-center py-4 border-t border-neutral-800/60 text-[11px] text-neutral-400 flex-shrink-0">
+        <div className="flex items-center justify-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Biometric data processed in memory only • Selfies never stored</span>
+        </div>
+      </footer>
     </div>
   );
 }
