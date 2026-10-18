@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Download, Camera, Loader2, Sparkles, Images } from "lucide-react";
+import { Download, Camera, Loader2 } from "lucide-react";
 import { PhotoItem, getFullPhotoUrl } from "../lib/api";
 import { PhotoCard } from "./PhotoCard";
 
@@ -119,8 +119,12 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
       <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-8 py-3 sm:py-6">
         {/* Subtle structured gallery helper banner */}
         <div className="mb-3.5 sm:mb-6 p-2.5 sm:p-3 rounded-xl bg-neutral-900/60 border border-neutral-800/80 flex items-center justify-between gap-2 text-xs text-neutral-400">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-400 flex-shrink-0" />
+          <div className="flex items-center gap-2.5">
+            <img
+              src="/tap_icon.png"
+              alt="Tap"
+              className="w-4 h-4 sm:w-5 sm:h-5 object-contain flex-shrink-0"
+            />
             <span className="leading-tight">Tap any photo to view in high resolution. If you miss any of your moments, please contact with us.</span>
           </div>
         </div>
