@@ -22,9 +22,18 @@ export interface SearchErrorResponse {
 
 export type SearchResponse = SearchSuccessResponse | SearchErrorResponse;
 
+function normalizeUrl(url: string): string {
+  let cleaned = url.trim().replace(/\/+$/, "");
+  if (!cleaned) return "";
+  if (!cleaned.startsWith("http://") && !cleaned.startsWith("https://")) {
+    cleaned = `https://${cleaned}`;
+  }
+  return cleaned;
+}
+
 const DEFAULT_PROD_API_URL = "https://bcethackphoto-production.up.railway.app";
 const rawUrl = process.env.NEXT_PUBLIC_API_URL || "";
-const API_BASE_URL = rawUrl.replace(/\/+$/, "");
+const API_BASE_URL = normalizeUrl(rawUrl);
 
 function getEffectiveApiUrl(): string {
   // If explicitly provided via environment variable, use it
