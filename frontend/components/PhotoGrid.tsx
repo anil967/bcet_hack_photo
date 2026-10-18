@@ -18,16 +18,6 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   // Strictly show only photos matching 50% or greater (>= 0.50)
   const qualifiedPhotos = photos.filter((p) => (p.matchScore ?? 1.0) >= 0.50);
 
-  // Pre-cache full-resolution images for the top photos in the background
-  useEffect(() => {
-    if (qualifiedPhotos && qualifiedPhotos.length > 0) {
-      qualifiedPhotos.slice(0, 8).forEach((p) => {
-        const img = new Image();
-        img.src = getFullPhotoUrl(p.imageUrl);
-      });
-    }
-  }, [qualifiedPhotos]);
-
   const downloadSinglePhoto = (photo: PhotoItem) => {
     const downloadUrl = getFullPhotoUrl(photo.downloadUrl);
     const link = document.createElement("a");

@@ -14,13 +14,18 @@ from backend.services.drive_service import drive_service
 logger = logging.getLogger("photofinder.api")
 router = APIRouter(prefix="/api")
 
+from concurrent.futures import ThreadPoolExecutor
+
 def prewarm_photos(photo_ids: List[str]):
-    """Background task to pre-cache matching thumbnails to disk so gallery is instantaneous."""
-    for pid in photo_ids:
+    """Background task to pre-cache matching thumbnails to disk using a worker pool."""
+    def _fetch(pid: str):
         try:
             drive_service.get_thumbnail_bytes(pid)
         except Exception as e:
             logger.debug(f"Prewarm thumbnail skipped for {pid}: {e}")
+
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        list(executor.map(_fetch, photo_ids))
 
 # Pydantic schemas
 class SearchPhotoRequest(BaseModel):
@@ -112,9 +117,9 @@ async def search_photos(payload: SearchPhotoRequest, request: Request, backgroun
     duration_ms = round((time.time() - start_time) * 1000, 2)
     logger.info(f"Search completed in {duration_ms}ms: found {len(matches)} matching photos.")
 
-    # Prewarm top matching full-res photos into local disk cache in background
+    # Prewarm top matching thumbnails in background with parallel pool
     if matches:
-        background_tasks.add_task(prewarm_photos, [m["id"] for m in matches[:12]])
+        background_tasks.add_task(prewarm_photos, [m["id"] for m in matches[:24]])
 
     return {
         "success": True,
@@ -124,9 +129,10 @@ async def search_photos(payload: SearchPhotoRequest, request: Request, backgroun
     }
 
 @router.get("/photos/{file_id}")
-async def get_photo(file_id: str):
+def get_photo(file_id: str):
     """
     Streams the full-resolution event photograph securely without exposing Drive URLs.
+    Synchronous 'def' enables FastAPI worker thread pool execution.
     """
     try:
         photo_bytes, mime_type = drive_service.get_photo_bytes(file_id)
@@ -144,9 +150,10 @@ async def get_photo(file_id: str):
         raise HTTPException(status_code=500, detail="Error retrieving photograph")
 
 @router.get("/photos/{file_id}/thumbnail")
-async def get_photo_thumbnail(file_id: str):
+def get_photo_thumbnail(file_id: str):
     """
-    Streams an optimized responsive thumbnail (JPEG, ~400px width).
+    Streams an optimized responsive thumbnail (JPEG, ~500px width).
+    Synchronous 'def' enables FastAPI worker thread pool execution.
     """
     try:
         thumb_bytes, mime_type = drive_service.get_thumbnail_bytes(file_id)
@@ -164,9 +171,10 @@ async def get_photo_thumbnail(file_id: str):
         raise HTTPException(status_code=500, detail="Error generating thumbnail")
 
 @router.get("/photos/{file_id}/download")
-async def download_photo(file_id: str):
+def download_photo(file_id: str):
     """
     Triggers direct file download with attachment header and clean filename.
+    Synchronous 'def' enables FastAPI worker thread pool execution.
     """
     try:
         photo_bytes, mime_type = drive_service.get_photo_bytes(file_id)

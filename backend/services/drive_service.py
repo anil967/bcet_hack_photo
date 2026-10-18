@@ -60,6 +60,32 @@ class DriveService:
         else:
             logger.info("Operating in Local Sample Storage mode (Google Drive credentials not set or STORAGE_MODE=sample).")
 
+        # Automatically purge any historically corrupted non-JPEG files from persistent disk
+        self._clean_corrupted_cache()
+
+    def _clean_corrupted_cache(self):
+        """Purges any non-JPEG files (e.g. historical HTML sign-in redirect responses)."""
+        purged = 0
+        for folder in [self.thumbnail_cache_dir, self.photo_cache_dir]:
+            if not os.path.exists(folder):
+                continue
+            try:
+                for fname in os.listdir(folder):
+                    fpath = os.path.join(folder, fname)
+                    if os.path.isfile(fpath):
+                        try:
+                            with open(fpath, "rb") as f:
+                                header = f.read(4)
+                            if len(header) < 2 or header[:2] != b'\xff\xd8':
+                                os.remove(fpath)
+                                purged += 1
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.warning(f"Error during cache cleanup of {folder}: {e}")
+        if purged > 0:
+            logger.info(f"Purged {purged} corrupted non-JPEG cache files from disk.")
+
     def _check_and_reload_token_if_needed(self):
         """Automatically re-initialize Google Drive client if token.json has been refreshed on disk."""
         if self.token_file and os.path.exists(self.token_file):
@@ -222,7 +248,15 @@ class DriveService:
         if os.path.exists(cache_path):
             try:
                 with open(cache_path, "rb") as f:
-                    return f.read(), "image/jpeg"
+                    data = f.read()
+                if len(data) > 1000 and data[:2] == b'\xff\xd8':
+                    return data, "image/jpeg"
+                else:
+                    # Purge corrupt file
+                    try:
+                        os.remove(cache_path)
+                    except Exception:
+                        pass
             except Exception as e:
                 logger.warning(f"Failed to read cached photo {file_id}: {e}")
 
@@ -241,7 +275,9 @@ class DriveService:
             if os.path.exists(cache_path):
                 try:
                     with open(cache_path, "rb") as f:
-                        return f.read(), "image/jpeg"
+                        data = f.read()
+                    if len(data) > 1000 and data[:2] == b'\xff\xd8':
+                        return data, "image/jpeg"
                 except Exception:
                     pass
 
@@ -260,11 +296,12 @@ class DriveService:
                     photo_bytes = fh.read()
 
                     # Save to disk cache for instant subsequent reads
-                    try:
-                        with open(cache_path, "wb") as f:
-                            f.write(photo_bytes)
-                    except Exception as save_err:
-                        logger.warning(f"Failed to cache full photo {file_id}: {save_err}")
+                    if len(photo_bytes) > 1000 and photo_bytes[:2] == b'\xff\xd8':
+                        try:
+                            with open(cache_path, "wb") as f:
+                                f.write(photo_bytes)
+                        except Exception as save_err:
+                            logger.warning(f"Failed to cache full photo {file_id}: {save_err}")
 
                     return photo_bytes, "image/jpeg"
                 except Exception as e:
@@ -281,55 +318,75 @@ class DriveService:
 
     def get_thumbnail_bytes(self, file_id: str) -> Tuple[bytes, str]:
         """
-        Retrieves or generates an optimized thumbnail (max 450px) with high-speed disk caching.
+        Retrieves or generates an optimized thumbnail (max 500px) with high-speed disk caching.
         """
         cache_path = os.path.join(self.thumbnail_cache_dir, f"{file_id}_thumb.jpg")
         if os.path.exists(cache_path):
-            with open(cache_path, "rb") as f:
-                return f.read(), "image/jpeg"
-
-        # 1. High-Speed Fast Path: Fetch authorized Google Drive CDN thumbnail with signed link (~68KB)
-        if self.is_drive_mode:
             try:
-                self._check_and_reload_token_if_needed()
-                meta = self._drive_client.files().get(fileId=file_id, fields="thumbnailLink", supportsAllDrives=True).execute()
-                thumb_link = meta.get("thumbnailLink")
-                if thumb_link:
-                    # Request crisp 500px thumbnail with signed Drive CDN token
+                with open(cache_path, "rb") as f:
+                    data = f.read()
+                if len(data) > 500 and data[:2] == b'\xff\xd8':
+                    return data, "image/jpeg"
+                else:
+                    try:
+                        os.remove(cache_path)
+                    except Exception:
+                        pass
+            except Exception as e:
+                logger.warning(f"Error reading cached thumbnail {file_id}: {e}")
+
+        # 1. High-Speed Fast Path: Fetch authorized Google Drive CDN thumbnail with signed link (~20-50KB)
+        if self.is_drive_mode:
+            thumb_link = None
+            try:
+                with self._lock:
+                    self._check_and_reload_token_if_needed()
+                    meta = self._drive_client.files().get(
+                        fileId=file_id,
+                        fields="thumbnailLink",
+                        supportsAllDrives=True
+                    ).execute()
+                    thumb_link = meta.get("thumbnailLink")
+            except Exception as e:
+                logger.debug(f"Failed to get thumbnailLink metadata for {file_id}: {e}")
+
+            if thumb_link:
+                try:
+                    # Request crisp 500px thumbnail from Google's high-speed CDN
                     signed_url = thumb_link.replace("=s220", "=s500")
                     import urllib.request
                     req = urllib.request.Request(signed_url, headers={"User-Agent": "Mozilla/5.0"})
-                    with urllib.request.urlopen(req, timeout=6) as response:
+                    with urllib.request.urlopen(req, timeout=8) as response:
                         thumb_data = response.read()
-                        # Strictly verify JPEG magic bytes (0xFF, 0xD8) to guarantee valid image
-                        if thumb_data and len(thumb_data) > 1000 and thumb_data[:2] == b'\xff\xd8':
+                        if thumb_data and len(thumb_data) > 500 and thumb_data[:2] == b'\xff\xd8':
                             try:
                                 with open(cache_path, "wb") as f:
                                     f.write(thumb_data)
                             except Exception:
                                 pass
                             return thumb_data, "image/jpeg"
-            except Exception as e:
-                logger.debug(f"Direct signed Drive thumbnail fetch skipped for {file_id}: {e}. Falling back to full render.")
+                except Exception as e:
+                    logger.debug(f"Direct CDN thumbnail download skipped for {file_id}: {e}. Falling back to full render.")
 
         # 2. Local/Offline Fallback: Generate thumbnail from source photo
         photo_bytes, _ = self.get_photo_bytes(file_id)
         image = Image.open(io.BytesIO(photo_bytes))
-        image.thumbnail((450, 450), Image.Resampling.LANCZOS)
+        image.thumbnail((500, 500), Image.Resampling.LANCZOS)
         
         # Convert RGBA to RGB for JPEG
         if image.mode in ("RGBA", "P"):
             image = image.convert("RGB")
 
         thumb_io = io.BytesIO()
-        image.save(thumb_io, format="JPEG", quality=80)
+        image.save(thumb_io, format="JPEG", quality=82)
         thumb_bytes = thumb_io.getvalue()
 
-        try:
-            with open(cache_path, "wb") as f:
-                f.write(thumb_bytes)
-        except Exception as e:
-            logger.warning(f"Failed to cache thumbnail for {file_id}: {e}")
+        if thumb_bytes and thumb_bytes[:2] == b'\xff\xd8':
+            try:
+                with open(cache_path, "wb") as f:
+                    f.write(thumb_bytes)
+            except Exception as e:
+                logger.warning(f"Failed to cache thumbnail for {file_id}: {e}")
 
         return thumb_bytes, "image/jpeg"
 
