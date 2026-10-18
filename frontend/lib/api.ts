@@ -22,7 +22,7 @@ export interface SearchErrorResponse {
 
 export type SearchResponse = SearchSuccessResponse | SearchErrorResponse;
 
-const DEFAULT_PROD_API_URL = "https://photofinder-backend-pw5f.onrender.com";
+const DEFAULT_PROD_API_URL = "https://lesser-insider-referring-advisors.trycloudflare.com";
 const rawUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const API_BASE_URL = rawUrl.replace(/\/+$/, "");
 
