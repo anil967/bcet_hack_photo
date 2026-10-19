@@ -18,22 +18,15 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
   // Strictly show only photos matching 50% or greater (>= 0.50)
   const qualifiedPhotos = photos.filter((p) => (p.matchScore ?? 1.0) >= 0.50);
 
-  const downloadSinglePhoto = async (photo: PhotoItem) => {
-    try {
-      const downloadUrl = getFullPhotoUrl(photo.downloadUrl);
-      const res = await fetch(downloadUrl);
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = photo.fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
-    } catch {
-      window.open(getFullPhotoUrl(photo.downloadUrl), "_blank");
-    }
+  const downloadSinglePhoto = (photo: PhotoItem) => {
+    const downloadUrl = getFullPhotoUrl(photo.downloadUrl);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = photo.fileName;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleDownloadAll = async () => {
@@ -45,36 +38,28 @@ export function PhotoGrid({ photos, onViewPhoto, onReset }: PhotoGridProps) {
     try {
       const baseUrl = getEffectiveApiUrl();
       const photoIds = qualifiedPhotos.map((p) => p.id);
+      const zipUrl = `${baseUrl}/api/photos/download-zip?ids=${photoIds.join(",")}`;
 
-      const response = await fetch(`${baseUrl}/api/photos/download-zip`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ photo_ids: photoIds }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate zip");
-      }
-
-      setDownloadStatus("Downloading ZIP...");
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
+      // Native browser direct download - works on iOS Safari & Android Chrome without memory blocks
       const link = document.createElement("a");
-      link.href = blobUrl;
+      link.href = zipUrl;
       link.download = "Your_Odyssey_Moments.zip";
+      link.target = "_blank";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+
+      setTimeout(() => {
+        setDownloadingAll(false);
+        setDownloadStatus("");
+      }, 3500);
     } catch (err) {
       console.error("ZIP download failed, falling back to sequential download:", err);
-      // Sequential fallback if zip endpoint ever fails
       for (let i = 0; i < qualifiedPhotos.length; i++) {
         setDownloadStatus(`(${i + 1}/${qualifiedPhotos.length})`);
-        await downloadSinglePhoto(qualifiedPhotos[i]);
+        downloadSinglePhoto(qualifiedPhotos[i]);
         await new Promise((resolve) => setTimeout(resolve, 600));
       }
-    } finally {
       setDownloadingAll(false);
       setDownloadStatus("");
     }

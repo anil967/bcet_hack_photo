@@ -3,7 +3,7 @@ import time
 import logging
 from typing import List, Optional
 from pydantic import BaseModel, Field
-from fastapi import APIRouter, HTTPException, Request, Response, Header, Depends, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Request, Response, Header, Depends, BackgroundTasks, Query
 from fastapi.responses import StreamingResponse
 import io
 import zipfile
@@ -212,18 +212,7 @@ def download_photo(file_id: str):
 class DownloadZipRequest(BaseModel):
     photo_ids: List[str]
 
-@router.post("/photos/download-zip")
-def download_photos_zip(payload: DownloadZipRequest):
-    """
-    Packages matching event photos into a single clean ZIP archive.
-    Enables reliable 1-click 'Download All' on mobile and desktop without browser popup blocks.
-    """
-    if not payload.photo_ids:
-        raise HTTPException(status_code=400, detail="No photos specified for download")
-
-    # Safety limit: max 150 photos per zip
-    target_ids = payload.photo_ids[:150]
-
+def create_zip_archive(target_ids: List[str]) -> bytes:
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, mode="w", compression=zipfile.ZIP_STORED) as zf:
         added_names = set()
@@ -247,8 +236,37 @@ def download_photos_zip(payload: DownloadZipRequest):
                 logger.warning(f"Skipping photo {pid} in zip archive: {e}")
 
     zip_buffer.seek(0)
+    return zip_buffer.getvalue()
+
+@router.post("/photos/download-zip")
+def download_photos_zip_post(payload: DownloadZipRequest):
+    """
+    POST endpoint to download multiple photos as a single ZIP archive.
+    """
+    if not payload.photo_ids:
+        raise HTTPException(status_code=400, detail="No photos specified for download")
+    target_ids = payload.photo_ids[:150]
+    zip_bytes = create_zip_archive(target_ids)
     return Response(
-        content=zip_buffer.getvalue(),
+        content=zip_bytes,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": 'attachment; filename="Your_Odyssey_Moments.zip"',
+            "Cache-Control": "private, no-cache"
+        }
+    )
+
+@router.get("/photos/download-zip")
+def download_photos_zip_get(ids: str = Query(..., description="Comma-separated photo IDs")):
+    """
+    GET endpoint allowing direct native browser downloads on mobile without popup blockers.
+    """
+    photo_ids = [pid.strip() for pid in ids.split(",") if pid.strip()][:150]
+    if not photo_ids:
+        raise HTTPException(status_code=400, detail="No photos specified for download")
+    zip_bytes = create_zip_archive(photo_ids)
+    return Response(
+        content=zip_bytes,
         media_type="application/zip",
         headers={
             "Content-Disposition": 'attachment; filename="Your_Odyssey_Moments.zip"',

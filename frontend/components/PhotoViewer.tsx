@@ -113,25 +113,19 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
     touchStartXRef.current = null;
   };
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     if (!currentPhoto) return;
-    try {
-      const res = await fetch(getFullPhotoUrl(currentPhoto.downloadUrl));
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = currentPhoto.fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
-    } catch {
-      window.open(getFullPhotoUrl(currentPhoto.downloadUrl), "_blank");
-    }
+    const downloadUrl = getFullPhotoUrl(currentPhoto.downloadUrl);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = currentPhoto.fileName;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     setDownloaded(true);
-    setTimeout(() => setDownloaded(false), 2000);
+    setTimeout(() => setDownloaded(false), 2500);
   };
 
   if (!currentPhoto) return null;
