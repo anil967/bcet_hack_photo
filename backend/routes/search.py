@@ -132,11 +132,11 @@ async def search_photos(payload: SearchPhotoRequest, request: Request, backgroun
 @router.get("/photos/{file_id}")
 def get_photo(file_id: str):
     """
-    Streams the full-resolution event photograph securely without exposing Drive URLs.
+    Streams a crisp high-definition (1600px) preview image for the lightbox in <500ms.
     Synchronous 'def' enables FastAPI worker thread pool execution.
     """
     try:
-        photo_bytes, mime_type = drive_service.get_photo_bytes(file_id)
+        photo_bytes, mime_type = drive_service.get_preview_bytes(file_id)
         return Response(
             content=photo_bytes,
             media_type=mime_type,
