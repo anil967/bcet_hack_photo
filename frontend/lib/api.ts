@@ -31,13 +31,14 @@ function normalizeUrl(url: string): string {
   return cleaned;
 }
 
-const DEFAULT_PROD_API_URL = "https://bcethackphoto-production.up.railway.app";
+export const CLOUDFLARE_TUNNEL_URL = "https://stays-dive-providence-antibodies.trycloudflare.com";
+const DEFAULT_PROD_API_URL = CLOUDFLARE_TUNNEL_URL;
 const rawUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const API_BASE_URL = normalizeUrl(rawUrl);
 
 export function getEffectiveApiUrl(): string {
-  // If explicitly provided via environment variable, use it
-  if (API_BASE_URL) {
+  // If explicitly provided via environment variable and not an old railway deployment, use it
+  if (API_BASE_URL && !API_BASE_URL.includes("railway.app")) {
     return API_BASE_URL;
   }
 
