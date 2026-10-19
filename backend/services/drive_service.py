@@ -48,6 +48,7 @@ class DriveService:
             self.token_file = os.path.join(self.root_dir, "token.json")
         self.token_json = os.getenv("GOOGLE_TOKEN_JSON", "").strip()
         self._token_file_mtime = 0
+        self._thumb_link_cache = {}
 
         self._drive_client = None
         has_token = bool((self.token_file and os.path.exists(self.token_file)) or self.token_json)
@@ -165,11 +166,67 @@ class DriveService:
             if credentials:
                 self._drive_client = build("drive", "v3", credentials=credentials, cache_discovery=False)
                 logger.info("Google Drive v3 client connected successfully.")
+                import threading
+                threading.Thread(target=self.warm_thumbnail_links, daemon=True).start()
             else:
                 logger.warning("No valid Google Drive credentials could be loaded.")
         except Exception as e:
             logger.error(f"Failed to initialize Google Drive client: {e}. Falling back to sample photos.")
             self._drive_client = None
+
+    def warm_thumbnail_links(self):
+        """Preloads thumbnail links for all event photos in batch so individual Drive API calls are avoided."""
+        if not self.is_drive_mode or not self.folder_id:
+            return
+        try:
+            page_token = None
+            loaded = 0
+            while True:
+                with self._lock:
+                    res = self._drive_client.files().list(
+                        q=f"'{self.folder_id}' in parents and trashed = false",
+                        fields="nextPageToken, files(id, thumbnailLink)",
+                        pageSize=1000,
+                        pageToken=page_token,
+                        supportsAllDrives=True,
+                        includeItemsFromAllDrives=True
+                    ).execute()
+                for f in res.get("files", []):
+                    fid = f.get("id")
+                    tlink = f.get("thumbnailLink")
+                    if fid and tlink:
+                        self._thumb_link_cache[fid] = tlink
+                        loaded += 1
+                page_token = res.get("nextPageToken")
+                if not page_token:
+                    break
+            logger.info(f"Preloaded {loaded} Google CDN thumbnail links into memory.")
+        except Exception as e:
+            logger.warning(f"Error preloading thumbnail links: {e}")
+
+    def get_thumbnail_link(self, file_id: str) -> Optional[str]:
+        """Returns the CDN thumbnail link from memory cache or queries it without blocking other threads."""
+        if file_id in self._thumb_link_cache:
+            return self._thumb_link_cache[file_id]
+
+        if not self.is_drive_mode:
+            return None
+
+        try:
+            with self._lock:
+                self._check_and_reload_token_if_needed()
+                meta = self._drive_client.files().get(
+                    fileId=file_id,
+                    fields="thumbnailLink",
+                    supportsAllDrives=True
+                ).execute()
+                link = meta.get("thumbnailLink")
+                if link:
+                    self._thumb_link_cache[file_id] = link
+                return link
+        except Exception as e:
+            logger.debug(f"Failed to query thumbnailLink for {file_id}: {e}")
+            return None
 
     @property
     def is_drive_mode(self) -> bool:
@@ -342,36 +399,23 @@ class DriveService:
             return self.get_photo_bytes(file_id)
 
         # High-Speed Fast Path: Google CDN 1600px preview
-        if self.is_drive_mode:
-            thumb_link = None
+        thumb_link = self.get_thumbnail_link(file_id)
+        if thumb_link:
             try:
-                with self._lock:
-                    self._check_and_reload_token_if_needed()
-                    meta = self._drive_client.files().get(
-                        fileId=file_id,
-                        fields="thumbnailLink",
-                        supportsAllDrives=True
-                    ).execute()
-                    thumb_link = meta.get("thumbnailLink")
+                signed_url = thumb_link.replace("=s220", "=s1600")
+                import urllib.request
+                req = urllib.request.Request(signed_url, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    preview_data = response.read()
+                if len(preview_data) > 1000 and preview_data[:2] == b'\xff\xd8':
+                    try:
+                        with open(cache_path, "wb") as f:
+                            f.write(preview_data)
+                    except Exception as save_err:
+                        logger.warning(f"Failed to cache preview {file_id}: {save_err}")
+                    return preview_data, "image/jpeg"
             except Exception as e:
-                logger.debug(f"Failed to get thumbnailLink for preview {file_id}: {e}")
-
-            if thumb_link:
-                try:
-                    signed_url = thumb_link.replace("=s220", "=s1600")
-                    import urllib.request
-                    req = urllib.request.Request(signed_url, headers={"User-Agent": "Mozilla/5.0"})
-                    with urllib.request.urlopen(req, timeout=10) as response:
-                        preview_data = response.read()
-                    if len(preview_data) > 1000 and preview_data[:2] == b'\xff\xd8':
-                        try:
-                            with open(cache_path, "wb") as f:
-                                f.write(preview_data)
-                        except Exception as save_err:
-                            logger.warning(f"Failed to cache preview {file_id}: {save_err}")
-                        return preview_data, "image/jpeg"
-                except Exception as e:
-                    logger.warning(f"Error fetching CDN preview for {file_id}: {e}")
+                logger.warning(f"Error fetching CDN preview for {file_id}: {e}")
 
         # Fallback to full photo bytes if CDN thumbnail is unavailable
         return self.get_photo_bytes(file_id)
@@ -395,22 +439,9 @@ class DriveService:
             except Exception as e:
                 logger.warning(f"Error reading cached thumbnail {file_id}: {e}")
 
-        # 1. High-Speed Fast Path: Fetch authorized Google Drive CDN thumbnail with signed link (~20-50KB)
-        if self.is_drive_mode:
-            thumb_link = None
-            try:
-                with self._lock:
-                    self._check_and_reload_token_if_needed()
-                    meta = self._drive_client.files().get(
-                        fileId=file_id,
-                        fields="thumbnailLink",
-                        supportsAllDrives=True
-                    ).execute()
-                    thumb_link = meta.get("thumbnailLink")
-            except Exception as e:
-                logger.debug(f"Failed to get thumbnailLink metadata for {file_id}: {e}")
-
-            if thumb_link:
+        # 1. High-Speed Fast Path: Fetch authorized Google Drive CDN thumbnail (~20-50KB)
+        thumb_link = self.get_thumbnail_link(file_id)
+        if thumb_link:
                 try:
                     # Request crisp 500px thumbnail from Google's high-speed CDN
                     signed_url = thumb_link.replace("=s220", "=s500")

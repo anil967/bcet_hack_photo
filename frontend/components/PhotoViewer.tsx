@@ -203,8 +203,8 @@ export function PhotoViewer({ photos, currentIndex, onClose, onSelectIndex }: Ph
             <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500 animate-pulse z-30" />
           )}
 
-          {/* Explicit Loading Spinner & Friendly Please Wait Message */}
-          {!isLoaded && !hasError && (
+          {/* Friendly Please Wait Message only if slow network connection (>2.5s) */}
+          {!isLoaded && !hasError && loadSeconds > 2.5 && (
             <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-none transition-opacity duration-300 p-4">
               <div className="flex flex-col items-center gap-3 p-4 sm:p-5 rounded-2xl bg-neutral-900/95 border border-neutral-800 shadow-2xl max-w-xs text-center">
                 <Loader2 className="w-6 h-6 text-amber-400 animate-spin" />
