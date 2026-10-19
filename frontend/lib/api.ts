@@ -31,7 +31,7 @@ function normalizeUrl(url: string): string {
   return cleaned;
 }
 
-export const CLOUDFLARE_TUNNEL_URL = "https://dust-drum-real-nelson.trycloudflare.com";
+export const CLOUDFLARE_TUNNEL_URL = "https://wheels-agency-highway-shelf.trycloudflare.com";
 const DEFAULT_PROD_API_URL = CLOUDFLARE_TUNNEL_URL;
 const rawUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const API_BASE_URL = normalizeUrl(rawUrl);
