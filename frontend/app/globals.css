@@ -94,58 +94,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   outline-offset: 2px;
 }
 
-/* Camera flip & reverse spin animations */
-@keyframes spin-reverse {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-}
-
-.animate-spin-reverse {
-  animation: spin-reverse 0.85s linear infinite;
-}
-
-@keyframes camera-flip-forward {
-  0% {
-    transform: perspective(1000px) rotateY(0deg) scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: perspective(1000px) rotateY(90deg) scale(0.92);
-    opacity: 0.4;
-  }
-  100% {
-    transform: perspective(1000px) rotateY(0deg) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes camera-flip-reverse {
-  0% {
-    transform: perspective(1000px) rotateY(0deg) scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: perspective(1000px) rotateY(-90deg) scale(0.92);
-    opacity: 0.4;
-  }
-  100% {
-    transform: perspective(1000px) rotateY(0deg) scale(1);
-    opacity: 1;
-  }
-}
-
-.animate-camera-flip-forward {
-  animation: camera-flip-forward 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.animate-camera-flip-reverse {
-  animation: camera-flip-reverse 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
