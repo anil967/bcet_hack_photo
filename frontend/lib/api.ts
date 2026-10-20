@@ -37,8 +37,8 @@ const rawUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const API_BASE_URL = normalizeUrl(rawUrl);
 
 export function getEffectiveApiUrl(): string {
-  // If explicitly provided via environment variable and not an old railway deployment, use it
-  if (API_BASE_URL && !API_BASE_URL.includes("railway.app")) {
+  // Prefer current code CLOUDFLARE_TUNNEL_URL over stale trycloudflare/railway env vars in Vercel
+  if (API_BASE_URL && !API_BASE_URL.includes("railway.app") && !API_BASE_URL.includes("trycloudflare.com")) {
     return API_BASE_URL;
   }
 
