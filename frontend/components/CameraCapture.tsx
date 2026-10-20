@@ -18,6 +18,9 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
   const [isReady, setIsReady] = useState(false);
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
+  const [isSwitching, setIsSwitching] = useState(false);
+  const [flipDirection, setFlipDirection] = useState<"forward" | "reverse">("forward");
+  const [rotationDegrees, setRotationDegrees] = useState(0);
 
   useEffect(() => {
     if (navigator.mediaDevices?.enumerateDevices) {
@@ -39,6 +42,7 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       const msg = "Camera API is not supported by your browser. Please upload a photo instead.";
       setPermissionError(msg);
+      setIsSwitching(false);
       onError("CAMERA_NOT_SUPPORTED", msg);
       return;
     }
@@ -58,10 +62,20 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
         videoRef.current.onloadedmetadata = () => {
-          videoRef.current?.play().then(() => setIsReady(true)).catch(() => {});
+          videoRef.current
+            ?.play()
+            .then(() => {
+              setIsReady(true);
+              setIsSwitching(false);
+            })
+            .catch(() => {
+              setIsReady(true);
+              setIsSwitching(false);
+            });
         };
       }
     } catch (err: unknown) {
+      setIsSwitching(false);
       const error = err as Error;
       let msg = "Camera access is required. Please allow camera permissions in your browser.";
       let code = "CAMERA_PERMISSION_DENIED";
@@ -162,7 +176,23 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
   };
 
   const toggleCamera = () => {
-    setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+    if (isSwitching) return;
+    setIsSwitching(true);
+    setIsReady(false);
+
+    setFacingMode((prev) => {
+      const next = prev === "user" ? "environment" : "user";
+      if (next === "environment") {
+        // Switching to Back Camera: forward rotation (+180 deg)
+        setFlipDirection("forward");
+        setRotationDegrees((deg) => deg + 180);
+      } else {
+        // Switching to Front Camera: reverse rotation (-180 deg)
+        setFlipDirection("reverse");
+        setRotationDegrees((deg) => deg - 180);
+      }
+      return next;
+    });
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,8 +225,16 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
 
   return (
     <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col items-center">
-      {/* Video Frame: Clean modern rounded card with subtle hairline border */}
-      <div className="relative w-full aspect-[3/4] max-h-[50vh] sm:max-h-[58vh] bg-neutral-950 rounded-2xl border border-neutral-800 shadow-2xl overflow-hidden flex items-center justify-center">
+      {/* Video Frame: Clean modern rounded card with subtle hairline border and 3D flip motion */}
+      <div
+        className={`relative w-full aspect-[3/4] max-h-[50vh] sm:max-h-[58vh] bg-neutral-950 rounded-2xl border border-neutral-800 shadow-2xl overflow-hidden flex items-center justify-center transition-all ${
+          isSwitching
+            ? flipDirection === "reverse"
+              ? "animate-camera-flip-reverse"
+              : "animate-camera-flip-forward"
+            : ""
+        }`}
+      >
         {permissionError ? (
           <div className="p-5 text-center flex flex-col items-center justify-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-red-950/40 border border-red-500/30 flex items-center justify-center text-red-400">
@@ -234,22 +272,70 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
               } ${isReady ? "opacity-100" : "opacity-0"}`}
             />
 
-            {/* Minimalist Face Reticle: Clean, ultra-crisp subtle guide without neon glow */}
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="w-[60%] max-w-[200px] aspect-[3/4] rounded-full border-2 border-dashed border-white/30" />
-            </div>
+            {/* Minimalist Face Reticle: Active guide when camera is ready */}
+            {isReady && (
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-300">
+                <div className="w-[60%] max-w-[200px] aspect-[3/4] rounded-full border-2 border-dashed border-white/30" />
+              </div>
+            )}
 
-            {/* Top right camera toggle */}
+            {/* Dynamic Camera Switch Loader with Reverse/Forward Motion */}
+            {!isReady && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm z-10 p-4 transition-all duration-300 select-none">
+                <div className="relative w-16 h-16 flex items-center justify-center mb-3">
+                  {/* Subtle pulsing background glow */}
+                  <div className="absolute inset-0 rounded-full bg-amber-500/10 animate-ping opacity-40" />
+                  
+                  {/* Outer track ring */}
+                  <div className="w-16 h-16 rounded-full border-2 border-neutral-800" />
+                  
+                  {/* Animated spinning loader ring: reverses motion when switching back to front camera! */}
+                  <div
+                    className={`absolute inset-0 w-16 h-16 rounded-full border-2 border-transparent border-t-amber-400 border-r-amber-500/60 ${
+                      flipDirection === "reverse" ? "animate-spin-reverse" : "animate-spin"
+                    }`}
+                  />
+                  
+                  {/* Center rotating icon: reverses motion when switching back to front camera */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <RefreshCw
+                      className={`w-6 h-6 text-amber-400 ${
+                        flipDirection === "reverse" ? "animate-spin-reverse" : "animate-spin"
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center space-y-1 text-center">
+                  <span className="text-xs font-semibold text-neutral-200 tracking-wide">
+                    {isSwitching
+                      ? facingMode === "user"
+                        ? "Switching to Front Camera"
+                        : "Switching to Back Camera"
+                      : "Starting Camera"}
+                  </span>
+                  <span className="text-[11px] text-neutral-400">
+                    {flipDirection === "reverse" ? "Reversing camera feed..." : "Calibrating optical sensor..."}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Top right camera toggle button */}
             {hasMultipleCameras && (
-              <div className="absolute top-3 right-3">
+              <div className="absolute top-3 right-3 z-20">
                 <button
                   type="button"
                   onClick={toggleCamera}
+                  disabled={isSwitching}
                   title="Switch Camera"
                   aria-label="Switch Camera"
-                  className="p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white border border-neutral-700/80 backdrop-blur-md transition shadow-md active:scale-95"
+                  className="p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white border border-neutral-700/80 backdrop-blur-md transition-all shadow-md active:scale-90 disabled:opacity-60"
                 >
-                  <RefreshCw className="w-3.5 h-3.5" />
+                  <RefreshCw
+                    className="w-3.5 h-3.5 transition-transform duration-500 ease-out"
+                    style={{ transform: `rotate(${rotationDegrees}deg)` }}
+                  />
                 </button>
               </div>
             )}
@@ -274,7 +360,7 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
         <button
           type="button"
           onClick={handleCapture}
-          disabled={!isReady}
+          disabled={!isReady || isSwitching}
           aria-label="Take Selfie"
           title="Take Selfie"
           className="relative group p-1 rounded-full bg-neutral-800 border-2 border-neutral-600 hover:border-neutral-400 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg active:scale-95"
@@ -293,11 +379,15 @@ export function CameraCapture({ onCapture, onError }: CameraCaptureProps) {
           <button
             type="button"
             onClick={toggleCamera}
+            disabled={isSwitching}
             title="Switch Camera"
             aria-label="Switch Camera"
-            className="p-3.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 transition active:scale-95 shadow-md"
+            className="p-3.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 transition active:scale-90 shadow-md disabled:opacity-60"
           >
-            <RefreshCw className="w-5 h-5" />
+            <RefreshCw
+              className="w-5 h-5 transition-transform duration-500 ease-out"
+              style={{ transform: `rotate(${rotationDegrees}deg)` }}
+            />
           </button>
         ) : (
           <div className="w-12 h-12" />
